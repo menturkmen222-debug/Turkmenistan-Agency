@@ -1,15 +1,20 @@
 openapi: 3.1.0
 info:
-  # Do not change the title, if the title changes, the import paths will be broken
   title: Api
   version: 0.1.0
-  description: API specification
+  description: Yenil Web Agency API
 servers:
   - url: /api
     description: Base API path
 tags:
   - name: health
     description: Health operations
+  - name: chat
+    description: AI chat operations
+  - name: contact
+    description: Contact form operations
+  - name: analytics
+    description: Analytics operations
 paths:
   /healthz:
     get:
@@ -24,6 +29,78 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /chat:
+    post:
+      operationId: sendChatMessage
+      tags: [chat]
+      summary: Send chat message to AI
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChatRequest"
+      responses:
+        "200":
+          description: AI response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChatResponse"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /contact:
+    post:
+      operationId: submitContactForm
+      tags: [contact]
+      summary: Submit contact form
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactRequest"
+      responses:
+        "200":
+          description: Contact form submitted successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactResponse"
+        "400":
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        "500":
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /analytics:
+    post:
+      operationId: trackAnalyticsEvent
+      tags: [analytics]
+      summary: Track analytics event
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AnalyticsRequest"
+      responses:
+        "200":
+          description: Event tracked
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AnalyticsResponse"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +110,113 @@ components:
           type: string
       required:
         - status
-
+    ChatMessage:
+      type: object
+      properties:
+        role:
+          type: string
+          enum: [user, assistant, system]
+        content:
+          type: string
+      required:
+        - role
+        - content
+    ChatRequest:
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChatMessage"
+        locale:
+          type: string
+          default: tk
+      required:
+        - messages
+    ChatResponse:
+      type: object
+      properties:
+        message:
+          type: string
+        role:
+          type: string
+      required:
+        - message
+        - role
+    ContactRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        businessName:
+          type: string
+        phone:
+          type: string
+        email:
+          type: string
+        selectedTier:
+          type: string
+        designStyle:
+          type: string
+        message:
+          type: string
+        locale:
+          type: string
+          default: tk
+        existingUrl:
+          type: string
+        industry:
+          type: string
+        contactMethod:
+          type: array
+          items:
+            type: string
+        timeline:
+          type: string
+      required:
+        - name
+        - businessName
+        - phone
+        - email
+        - message
+    ContactResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+      required:
+        - success
+        - message
+    AnalyticsRequest:
+      type: object
+      properties:
+        event:
+          type: string
+        section:
+          type: string
+        locale:
+          type: string
+        device:
+          type: string
+        timeOnSite:
+          type: number
+      required:
+        - event
+    AnalyticsResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+      required:
+        - success
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+        details:
+          type: string
+      required:
+        - error

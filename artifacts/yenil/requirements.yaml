@@ -1,0 +1,29 @@
+packages:
+  "framer-motion": "For premium page transitions, scroll animations, and custom cursor"
+  "react-hook-form": "For robust contact form state management"
+  "@hookform/resolvers": "For Zod schema validation integration"
+  "canvas-confetti": "For beautiful success state in the contact form"
+  "@types/canvas-confetti": "Types for canvas-confetti"
+  "clsx": "For conditional class names"
+  "tailwind-merge": "For merging tailwind classes safely"
+
+images:
+  - path: "artifacts/yenil/public/images/hero-bg.png"
+    description: "Abstract gradient mesh background, deep forest green and luxurious gold color blobs moving in a dark abyss, premium and cinematic feel, ultra high resolution"
+    aspect_ratio: "16:9"
+  - path: "artifacts/yenil/public/images/logo-mark.png"
+    description: "Premium geometric logo mark, minimalist, bright gold on completely transparent background"
+    aspect_ratio: "1:1"
+  - path: "artifacts/yenil/public/images/style-classic.png"
+    description: "Abstract UI presentation showing a classic, clean, white and dark blue layout for banks or clinics"
+    aspect_ratio: "16:9"
+  - path: "artifacts/yenil/public/images/style-modern.png"
+    description: "Abstract UI presentation showing a modern, dynamic layout with dark theme, neon accents and gradients"
+    aspect_ratio: "16:9"
+  - path: "artifacts/yenil/public/images/style-luxury.png"
+    description: "Abstract UI presentation showing an ultra-premium luxury layout with black, gold, and dark green cinematic elements"
+    aspect_ratio: "16:9"
+
+notes:
+  - The API client hooks are exported from @workspace/api-client-react
+  - We use standard REST patterns for the contact form and AI chat
