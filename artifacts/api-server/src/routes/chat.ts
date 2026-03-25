@@ -4,25 +4,37 @@ import { SendChatMessageBody, SendChatMessageResponse } from "@workspace/api-zod
 
 const router: IRouter = Router();
 
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
-const SYSTEM_PROMPT = `Sen Ýeňil web agentliginiň akylly kömekçisisin. 
-Esasan türkmen dilinde gepleşersiň, ýöne müşderi haýsy dilde ýazsa şol dilde jogap ber.
-Saýt döretmek, bahalar, hyzmatlar barada soraglara jogap ber.
-Mylaýym, professional we kömekçi bol.
+const SYSTEM_PROMPT = `Sen ÝEŇIL web agentliginiň akylly kömekçisisin.
+5 dilde suwara gepleşýärsiň: Türkmençe (esasy), Rus, Iňlis, Özbek we Türk.
+Müşderi haýsy dilde ýazsa, şol dilde jogap ber.
 
-Ýeňil barada bilmeli maglumatlar:
-- Türkmenistanyň №1 web agentligi
-- 3 paket hödürleýäris: START ($150~), PRO ($800~), ENTERPRISE (ylalaşyk)
-- 5 dilde goldaw: Türkmen, Türk, Özbek, Rus, Iňlis
-- 24 sagat tehniki goldaw
-- 50+ taslama tamamlandy
-- Aşgabat, Türkmenistan
-- Habarlaşmak: info@yenil.com.tm
+ÝEŇIL barada takyk maglumatlar (DIŇE şulary ulan):
+- Türkmenistanyň №1 premium web agentligi
+- Hyzmatlar: Landing Page, Korporatiw Saýt, E-Commerce (Onlaýn Dükan), PWA Programmalar, UI/UX Dizaýn, Saýt Optimizasiýasy
 
-Müşderi bilen baglanyşyk gurmak üçin mähirli bol. Gysgaça ýöne peýdaly jogap ber.`;
+BAHALAR:
+1. Starter — $199 (ozal $250 bolupdyr, $51 tygşytlaýarsyňyz)
+   • 1 sahypa Landing Page, mobil dizaýn, SEO, 1 aý goldaw
+   • Domen we Hosting aýratyn
+
+2. Professional E-Commerce — $599 (ozal $800, $201 tygşytlaýarsyňyz) ← EŇ KÖPLENÇ SAÝLANÝAN
+   • Hemme zat içinde: Domen + Hosting + SEO + AI
+   • 🎁 3 ýyllyk MUGT domen
+   • 🎁 Professional Logo — SOWGAT
+   • Hiç hili goşmaça töleg ýok
+
+3. Enterprise AI Solution — Ylalaşyk esasynda
+   • Çäksiz sahypalar, AI integrasiýa, 24/7 goldaw
+
+Habarlaşmak:
+- Telefon: +99371789091
+- Email: yenil.ru.tkm@gmail.com
+- Telegram: @yenil_ru
+- TikTok: @yenil.ru
+
+Mylaýym, professional we gysgaça jogap ber. Müşderini habarlaşmaga höweslendir.`;
 
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 
@@ -30,19 +42,43 @@ function checkRateLimit(ip: string): boolean {
   const now = Date.now();
   const windowMs = 60 * 1000;
   const maxRequests = 20;
-
   const record = rateLimitMap.get(ip);
   if (!record || now > record.resetTime) {
     rateLimitMap.set(ip, { count: 1, resetTime: now + windowMs });
     return true;
   }
-
-  if (record.count >= maxRequests) {
-    return false;
-  }
-
+  if (record.count >= maxRequests) return false;
   record.count++;
   return true;
+}
+
+async function sendChatSummaryToTelegram(userMessage: string, aiReply: string, locale: string): Promise<void> {
+  const token = process.env.TELEGRAM_BOT_TOKEN;
+  const userId1 = process.env.TELEGRAM_USER_ID_1;
+  const userId2 = process.env.TELEGRAM_USER_ID_2;
+  if (!token) return;
+
+  const timestamp = new Date().toLocaleString("ru-RU", { timeZone: "Asia/Ashgabat" });
+  const text = `🤖 <b>AI SÖHBET MAZMYNY</b>
+
+👤 <b>Müşderi:</b> ${userMessage.slice(0, 300)}${userMessage.length > 300 ? "..." : ""}
+
+🤖 <b>AI Jogaby:</b> ${aiReply.slice(0, 300)}${aiReply.length > 300 ? "..." : ""}
+
+🕐 ${timestamp} | 🌍 ${locale}`;
+
+  const recipients = [userId1, userId2].filter(Boolean);
+  for (const chatId of recipients) {
+    try {
+      await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ chat_id: chatId, text, parse_mode: "HTML" }),
+      });
+    } catch {
+      // Silently fail
+    }
+  }
 }
 
 router.post("/chat", async (req, res) => {
@@ -59,7 +95,7 @@ router.post("/chat", async (req, res) => {
     return;
   }
 
-  const { messages } = parsed.data;
+  const { messages, locale } = parsed.data;
 
   try {
     const completion = await groq.chat.completions.create({
@@ -74,12 +110,13 @@ router.post("/chat", async (req, res) => {
 
     const responseMessage = completion.choices[0]?.message?.content ?? "Bagyşlaň, şu wagt jogap berip bilmedim.";
 
-    const response = SendChatMessageResponse.parse({
-      message: responseMessage,
-      role: "assistant",
-    });
+    // Send the latest user message + AI reply to Telegram
+    const lastUserMsg = [...messages].reverse().find((m) => m.role === "user");
+    if (lastUserMsg) {
+      sendChatSummaryToTelegram(lastUserMsg.content, responseMessage, locale ?? "tk").catch(() => {});
+    }
 
-    res.json(response);
+    res.json(SendChatMessageResponse.parse({ message: responseMessage, role: "assistant" }));
   } catch (err) {
     req.log.error({ err }, "Groq API error");
     res.status(500).json({ error: "AI service temporarily unavailable" });

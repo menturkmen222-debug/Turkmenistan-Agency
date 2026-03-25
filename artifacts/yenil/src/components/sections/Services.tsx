@@ -1,5 +1,18 @@
 import { motion } from 'framer-motion';
-import { Monitor, Building2, ShoppingCart, Smartphone, Layout, Zap } from 'lucide-react';
+import { Monitor, Building2, ShoppingCart, Layout, Zap } from 'lucide-react';
+
+function PwaIcon() {
+  return (
+    <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-8 h-8">
+      <rect x="7" y="1" width="18" height="30" rx="3" stroke="currentColor" strokeWidth="2" />
+      <rect x="10" y="4" width="12" height="18" rx="1" fill="currentColor" fillOpacity="0.15" />
+      <circle cx="16" cy="26" r="1.5" fill="currentColor" />
+      <path d="M13 10 L16 7 L19 10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M16 7 L16 15" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path d="M13 13 L16 16 L19 13" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="2 1" />
+    </svg>
+  );
+}
 
 export function Services() {
   const services = [
@@ -19,9 +32,9 @@ export function Services() {
       desc: "Onlaýn satmak isleýärsiňizmi? Tölege taýýar, dolandyrmasy aňsat elektron dükkanlar."
     },
     {
-      icon: <Smartphone className="w-8 h-8" />,
-      title: "Mobil Applikasiýalar",
-      desc: "iOS we Android üçin ykjam we çalt applikasiýalar. Müşderileňiz hemişe siziňle."
+      icon: <PwaIcon />,
+      title: "PWA (Progressive Web Apps)",
+      desc: "App Store we Play Market garaşmazdan, göni brauzerden telefona gurnalýan, oflaýn işleýän we ykjam dizaýnly PWA programmalary. Müşderileriňiziň ekranynda hemişe bir basymda boluň."
     },
     {
       icon: <Layout className="w-8 h-8" />,
@@ -38,10 +51,10 @@ export function Services() {
   return (
     <section id="services" className="py-24 bg-surface relative">
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImdyaWQiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTSAwIDEwIEwgNDAgMTAgTSAxMCAwIEwgMTAgNDAiIGZpbGw9Im5vbmUiIHN0cm9rZT0icmdiYSg0NSwgMTU4LCA5MiwgMC4wNSkiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-50" />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="mb-16">
-          <motion.h2 
+          <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -49,7 +62,7 @@ export function Services() {
           >
             Nähili hyzmat hödürleýäris?
           </motion.h2>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -77,10 +90,7 @@ export function Services() {
                 <h3 className="text-2xl font-bold text-white mb-3 group-hover:text-primary-light transition-colors">
                   {service.title}
                 </h3>
-                <p className="text-muted leading-relaxed">
-                  {service.desc}
-                </p>
-                
+                <p className="text-muted leading-relaxed">{service.desc}</p>
                 <div className="mt-6 w-0 h-0.5 bg-gradient-to-r from-primary to-transparent group-hover:w-full transition-all duration-500" />
               </div>
             </motion.div>

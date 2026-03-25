@@ -9,6 +9,14 @@ import { useSubmitContactForm } from '@workspace/api-client-react';
 import { useTranslation } from '@/lib/i18n';
 import { useAnalytics } from '@/hooks/use-analytics';
 
+const INDUSTRIES = [
+  "Restoran / Aşhana", "Söwda / Dükan", "Saglyk / Klinika",
+  "Bilim / Kurs", "Gurluşyk / Hyzmat", "IT / Tehnologiýa",
+  "Syýahat / Myhmanhanalar", "Hukuk / Maslahat", "Beýlekiler"
+];
+
+const CONTACT_METHODS = ["Telegram", "WhatsApp", "IMO", "Telefon", "Email"];
+
 const contactSchema = z.object({
   name: z.string().min(2, "Adyňyz hökmany"),
   businessName: z.string().min(2, "Biznesiň ady hökmany"),
@@ -17,7 +25,10 @@ const contactSchema = z.object({
   selectedTier: z.string().optional(),
   designStyle: z.string().optional(),
   message: z.string().min(10, "Gysgaça maglumat ýazyň"),
-  timeline: z.string().optional()
+  existingUrl: z.string().optional(),
+  industry: z.string().optional(),
+  contactMethod: z.array(z.string()).optional(),
+  timeline: z.string().optional(),
 });
 
 type ContactFormValues = z.infer<typeof contactSchema>;
@@ -26,32 +37,31 @@ export function Contact() {
   const { t, locale } = useTranslation();
   const { trackEvent } = useAnalytics();
   const [isSuccess, setIsSuccess] = useState(false);
+  const [selectedMethods, setSelectedMethods] = useState<string[]>([]);
   const { mutate, isPending } = useSubmitContactForm();
 
   const { register, handleSubmit, formState: { errors }, watch, setValue } = useForm<ContactFormValues>({
     resolver: zodResolver(contactSchema),
-    defaultValues: { phone: '+993' }
+    defaultValues: { phone: '+993', contactMethod: [] }
   });
 
   const selectedTier = watch('selectedTier');
   const selectedStyle = watch('designStyle');
 
+  const toggleContactMethod = (method: string) => {
+    const updated = selectedMethods.includes(method)
+      ? selectedMethods.filter(m => m !== method)
+      : [...selectedMethods, method];
+    setSelectedMethods(updated);
+    setValue('contactMethod', updated);
+  };
+
   const onSubmit = (data: ContactFormValues) => {
-    const payload = {
-      ...data,
-      locale,
-    };
-    
-    mutate({ data: payload }, {
+    mutate({ data: { ...data, locale, contactMethod: selectedMethods } }, {
       onSuccess: () => {
         setIsSuccess(true);
         trackEvent('contact_form_submit', { success: true }, true);
-        confetti({
-          particleCount: 150,
-          spread: 70,
-          origin: { y: 0.6 },
-          colors: ['#D4A843', '#1B6B3A', '#FAFAF8']
-        });
+        confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 }, colors: ['#D4A843', '#1B6B3A', '#FAFAF8'] });
       },
       onError: () => {
         trackEvent('contact_form_submit', { success: false }, true);
@@ -60,10 +70,12 @@ export function Contact() {
     });
   };
 
+  const inputClass = "w-full bg-background border border-border rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all";
+
   if (isSuccess) {
     return (
       <section id="contact" className="py-24 bg-surface relative min-h-[600px] flex items-center justify-center">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           className="glass-card p-12 text-center max-w-lg mx-auto rounded-3xl"
@@ -75,10 +87,7 @@ export function Contact() {
           <p className="text-muted text-lg mb-8 leading-relaxed">
             Siziň ýüzlenmäňiz alyndy! Biz 6 sagadyň içinde siz bilen habarlaşarys. Taslamaňyza höwes bilen garaşýarys! 🚀
           </p>
-          <button 
-            onClick={() => setIsSuccess(false)}
-            className="px-8 py-3 rounded-full border border-border text-white hover:bg-white/5 transition-colors"
-          >
+          <button onClick={() => setIsSuccess(false)} className="px-8 py-3 rounded-full border border-border text-white hover:bg-white/5 transition-colors">
             Täze form iber
           </button>
         </motion.div>
@@ -95,58 +104,74 @@ export function Contact() {
         </div>
 
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8 glass-card p-8 sm:p-12 rounded-3xl">
-          
+
+          {/* Row 1: Name + Business */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-white mb-2">Adyňyz *</label>
-              <input 
-                {...register("name")}
-                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all"
-                placeholder="Maksat"
-              />
+              <input {...register("name")} className={inputClass} placeholder="Maksat" />
               {errors.name && <p className="text-red-400 text-xs mt-1">{errors.name.message}</p>}
             </div>
             <div>
               <label className="block text-sm font-medium text-white mb-2">Biznesingiziň ady *</label>
-              <input 
-                {...register("businessName")}
-                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all"
-                placeholder="Ýeňil HJ"
-              />
+              <input {...register("businessName")} className={inputClass} placeholder="Ýeňil HJ" />
               {errors.businessName && <p className="text-red-400 text-xs mt-1">{errors.businessName.message}</p>}
             </div>
+          </div>
+
+          {/* Row 2: Phone + Email */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
               <label className="block text-sm font-medium text-white mb-2">Telefon *</label>
-              <input 
-                {...register("phone")}
-                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all"
-              />
+              <input {...register("phone")} className={inputClass} />
               {errors.phone && <p className="text-red-400 text-xs mt-1">{errors.phone.message}</p>}
             </div>
             <div>
               <label className="block text-sm font-medium text-white mb-2">E-poçta *</label>
-              <input 
-                {...register("email")}
-                className="w-full bg-background border border-border rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all"
-                placeholder="mail@example.com"
-              />
+              <input {...register("email")} className={inputClass} placeholder="mail@example.com" />
               {errors.email && <p className="text-red-400 text-xs mt-1">{errors.email.message}</p>}
             </div>
           </div>
 
+          {/* Row 3: Existing URL + Industry */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Häzirki saýtyňyzyň URL-i</label>
+              <input {...register("existingUrl")} className={inputClass} placeholder="https://mysite.com" />
+              <p className="text-muted/60 text-xs mt-1">Häzir saýtyňyz ýok bolsa boş goýuň</p>
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-white mb-2">Pudak (Sektor)</label>
+              <select {...register("industry")} className={inputClass + " appearance-none cursor-pointer"}>
+                <option value="" className="bg-background">Pudak saýlaň...</option>
+                {INDUSTRIES.map(ind => (
+                  <option key={ind} value={ind} className="bg-background">{ind}</option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Package */}
           <div>
             <label className="block text-sm font-medium text-white mb-4">Haýsy paket gyzyklandyrýar?</label>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-              {['Ýeňil Start', 'Ýeňil Pro', 'Enterprise'].map(tier => (
-                <div 
-                  key={tier}
-                  onClick={() => setValue('selectedTier', tier)}
-                  className={`p-4 rounded-xl border cursor-pointer transition-all ${selectedTier === tier ? 'border-gold bg-gold/10' : 'border-border bg-background hover:border-white/30'}`}
+              {[
+                { id: 'Starter — $199', label: 'Starter', sub: '$199' },
+                { id: 'Professional E-Commerce — $599', label: 'Pro E-Commerce', sub: '$599' },
+                { id: 'Enterprise', label: 'Enterprise', sub: 'Ylalaşyk' }
+              ].map(tier => (
+                <div
+                  key={tier.id}
+                  onClick={() => setValue('selectedTier', tier.id)}
+                  className={`p-4 rounded-xl border cursor-pointer transition-all ${selectedTier === tier.id ? 'border-gold bg-gold/10' : 'border-border bg-background hover:border-white/30'}`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className={`font-medium ${selectedTier === tier ? 'text-gold' : 'text-white'}`}>{tier}</span>
-                    <div className={`w-4 h-4 rounded-full border ${selectedTier === tier ? 'border-gold bg-gold' : 'border-muted'} flex items-center justify-center`}>
-                      {selectedTier === tier && <div className="w-2 h-2 bg-black rounded-full" />}
+                    <div>
+                      <span className={`font-medium block ${selectedTier === tier.id ? 'text-gold' : 'text-white'}`}>{tier.label}</span>
+                      <span className="text-xs text-muted">{tier.sub}</span>
+                    </div>
+                    <div className={`w-4 h-4 rounded-full border flex-shrink-0 ${selectedTier === tier.id ? 'border-gold bg-gold' : 'border-muted'} flex items-center justify-center`}>
+                      {selectedTier === tier.id && <div className="w-2 h-2 bg-black rounded-full" />}
                     </div>
                   </div>
                 </div>
@@ -154,6 +179,7 @@ export function Contact() {
             </div>
           </div>
 
+          {/* Design Style */}
           <div>
             <label className="block text-sm font-medium text-white mb-4">Dizaýn Stili</label>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -162,7 +188,7 @@ export function Contact() {
                 { id: 'modern', label: 'Döwrebap & Dinamik', img: 'style-modern.png' },
                 { id: 'luxury', label: 'Lýuks & Premium', img: 'style-luxury.png' }
               ].map(style => (
-                <div 
+                <div
                   key={style.id}
                   onClick={() => setValue('designStyle', style.id)}
                   className={`rounded-xl border cursor-pointer overflow-hidden transition-all group ${selectedStyle === style.id ? 'border-primary ring-2 ring-primary/30' : 'border-border'}`}
@@ -179,18 +205,52 @@ export function Contact() {
             </div>
           </div>
 
+          {/* Contact Method checkboxes */}
+          <div>
+            <label className="block text-sm font-medium text-white mb-4">Habarlaşmak ýoly (köpüsini saýlap bilersiňiz)</label>
+            <div className="flex flex-wrap gap-3">
+              {CONTACT_METHODS.map(method => {
+                const active = selectedMethods.includes(method);
+                return (
+                  <button
+                    type="button"
+                    key={method}
+                    onClick={() => toggleContactMethod(method)}
+                    className={`px-4 py-2 rounded-full border text-sm font-medium transition-all ${active ? 'border-primary bg-primary/20 text-white' : 'border-border text-muted hover:border-white/40 hover:text-white'}`}
+                  >
+                    {active && <span className="mr-1">✓</span>}{method}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Timeline */}
+          <div>
+            <label className="block text-sm font-medium text-white mb-2">Möhlet (Deadline)</label>
+            <select {...register("timeline")} className={inputClass + " appearance-none cursor-pointer"}>
+              <option value="" className="bg-background">Möhlet saýlaň...</option>
+              <option value="1 hepde" className="bg-background">1 hepde (Gyssagly)</option>
+              <option value="2 hepde" className="bg-background">2 hepde</option>
+              <option value="1 aý" className="bg-background">1 aý</option>
+              <option value="2-3 aý" className="bg-background">2-3 aý</option>
+              <option value="Möhlet ýok" className="bg-background">Möhlet ýok</option>
+            </select>
+          </div>
+
+          {/* Message */}
           <div>
             <label className="block text-sm font-medium text-white mb-2">Taslamaňyz barada gysgaça *</label>
-            <textarea 
+            <textarea
               {...register("message")}
               rows={4}
-              className="w-full bg-background border border-border rounded-xl px-4 py-3 text-white focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/50 transition-all resize-none"
+              className={inputClass + " resize-none"}
               placeholder="Meselem: Restoran menýusy we bron ulgamy bolan saýt..."
             />
             {errors.message && <p className="text-red-400 text-xs mt-1">{errors.message.message}</p>}
           </div>
 
-          <button 
+          <button
             type="submit"
             disabled={isPending}
             className="w-full py-4 rounded-xl bg-gradient-to-r from-primary to-primary-light text-white font-bold text-lg shadow-xl shadow-primary/20 hover:shadow-primary/40 hover:scale-[1.01] transition-all flex items-center justify-center gap-2 disabled:opacity-70 disabled:scale-100 disabled:cursor-not-allowed"
@@ -198,7 +258,7 @@ export function Contact() {
             {isPending ? "Iberilýär..." : "Habarlaşmak Talapnamasyny Iberiň"}
             {!isPending && <Send className="w-5 h-5" />}
           </button>
-          
+
         </form>
       </div>
     </section>

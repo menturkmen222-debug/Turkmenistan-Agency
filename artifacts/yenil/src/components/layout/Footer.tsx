@@ -1,16 +1,34 @@
-import { Instagram, Send, Video, Youtube } from 'lucide-react';
+import { Send, Video } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n';
+
+function TikTokIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+      <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.31 6.31 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.82a8.16 8.16 0 004.77 1.52V6.89a4.85 4.85 0 01-1-.2z" />
+    </svg>
+  );
+}
+
+function ImoIcon() {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
+      <circle cx="12" cy="12" r="10" fillOpacity="0.2" stroke="currentColor" strokeWidth="1.5" />
+      <path d="M7 12c0-2.76 2.24-5 5-5s5 2.24 5 5-2.24 5-5 5-5-2.24-5-5z" fillOpacity="0.4" />
+      <circle cx="12" cy="12" r="2.5" />
+    </svg>
+  );
+}
 
 export function Footer() {
   const { t } = useTranslation();
-  
+
   return (
     <footer className="bg-gradient-to-b from-surface-2 to-background border-t border-gold/20 pt-20 pb-10 relative overflow-hidden">
       <div className="absolute inset-0 bg-mesh opacity-30 pointer-events-none" />
-      
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-16">
-          
+
           {/* Brand */}
           <div className="flex flex-col items-start">
             <a href="#" className="flex items-center gap-2 mb-4">
@@ -20,11 +38,43 @@ export function Footer() {
             <p className="text-muted max-w-sm mb-6 font-medium">
               Sanly dünýäde ýeňil ädim. Biz biznesiňizi ösdürmek üçin innowasiýa we dizaýny birleşdirýäris.
             </p>
-            <div className="flex gap-4">
-              <a href="#" className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-muted hover:text-gold hover:border-gold transition-colors"><Send className="w-4 h-4" /></a>
-              <a href="#" className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-muted hover:text-gold hover:border-gold transition-colors"><Instagram className="w-4 h-4" /></a>
-              <a href="#" className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-muted hover:text-gold hover:border-gold transition-colors"><Video className="w-4 h-4" /></a>
-              <a href="#" className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-muted hover:text-gold hover:border-gold transition-colors"><Youtube className="w-4 h-4" /></a>
+            <div className="flex gap-3">
+              <a
+                href="https://t.me/yenil_ru"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Telegram: @yenil_ru"
+                className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-muted hover:text-gold hover:border-gold transition-colors"
+              >
+                <Send className="w-4 h-4" />
+              </a>
+              <a
+                href="https://www.tiktok.com/@yenil.ru"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="TikTok: @yenil.ru"
+                className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-muted hover:text-gold hover:border-gold transition-colors"
+              >
+                <TikTokIcon />
+              </a>
+              <a
+                href="https://s.imoim.net/DNCXX6"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="IMO: @yenil.ru"
+                className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-muted hover:text-gold hover:border-gold transition-colors"
+              >
+                <ImoIcon />
+              </a>
+              <a
+                href="https://www.tiktok.com/@yenil.ru"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="Video"
+                className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-muted hover:text-gold hover:border-gold transition-colors"
+              >
+                <Video className="w-4 h-4" />
+              </a>
             </div>
           </div>
 
@@ -41,9 +91,21 @@ export function Footer() {
           {/* Contact */}
           <div className="flex flex-col space-y-4">
             <h4 className="text-white font-bold mb-2 uppercase tracking-wider text-sm">Habarlaşyň</h4>
-            <a href="tel:+99365000000" className="text-gold font-mono text-lg hover:text-gold-light transition-colors">+993 65 XX-XX-XX</a>
-            <a href="mailto:info@yenil.com.tm" className="text-muted hover:text-white transition-colors">info@yenil.com.tm</a>
-            <p className="text-muted">Aşgabat, Türkmenistan<br/>Bitarap Türkmenistan şaýoly</p>
+            <a href="tel:+99371789091" className="text-gold font-mono text-lg hover:text-gold-light transition-colors">
+              +993 71 78-90-91
+            </a>
+            <a href="mailto:yenil.ru.tkm@gmail.com" className="text-muted hover:text-white transition-colors">
+              yenil.ru.tkm@gmail.com
+            </a>
+            <a href="https://t.me/yenil_ru" target="_blank" rel="noopener noreferrer" className="text-muted hover:text-white transition-colors">
+              Telegram: @yenil_ru
+            </a>
+            <a href="https://www.tiktok.com/@yenil.ru" target="_blank" rel="noopener noreferrer" className="text-muted hover:text-white transition-colors">
+              TikTok: @yenil.ru
+            </a>
+            <a href="https://s.imoim.net/DNCXX6" target="_blank" rel="noopener noreferrer" className="text-muted hover:text-white transition-colors">
+              IMO: @yenil.ru
+            </a>
           </div>
         </div>
 

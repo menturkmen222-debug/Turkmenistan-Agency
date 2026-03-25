@@ -11,22 +11,14 @@ async function sendTelegramMessage(message: string): Promise<void> {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const userId1 = process.env.TELEGRAM_USER_ID_1;
   const userId2 = process.env.TELEGRAM_USER_ID_2;
-
-  if (!token) {
-    throw new Error("TELEGRAM_BOT_TOKEN not configured");
-  }
+  if (!token) throw new Error("TELEGRAM_BOT_TOKEN not configured");
 
   const recipients = [userId1, userId2].filter(Boolean);
-
   for (const chatId of recipients) {
     await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        chat_id: chatId,
-        text: message,
-        parse_mode: "HTML",
-      }),
+      body: JSON.stringify({ chat_id: chatId, text: message, parse_mode: "HTML" }),
     });
   }
 }
@@ -39,18 +31,9 @@ router.post("/contact", async (req, res) => {
   }
 
   const {
-    name,
-    businessName,
-    phone,
-    email,
-    selectedTier,
-    designStyle,
-    message,
-    locale,
-    existingUrl,
-    industry,
-    contactMethod,
-    timeline,
+    name, businessName, phone, email,
+    selectedTier, designStyle, message, locale,
+    existingUrl, industry, contactMethod, timeline,
   } = parsed.data;
 
   const timestamp = new Date().toLocaleString("ru-RU", { timeZone: "Asia/Ashgabat" });
@@ -63,9 +46,8 @@ router.post("/contact", async (req, res) => {
 📞 <b>Telefon:</b> ${sanitize(phone)}
 📧 <b>Email:</b> ${sanitize(email)}
 
-📦 <b>Saýlanan Paket:</b>
-   → Tarif: ${selectedTier ? sanitize(selectedTier) : "Görkezilmedi"}
-   → Dizaýn Stili: ${designStyle ? sanitize(designStyle) : "Görkezilmedi"}
+📦 <b>Saýlanan Paket:</b> ${selectedTier ? sanitize(selectedTier) : "Görkezilmedi"}
+🎨 <b>Dizaýn Stili:</b> ${designStyle ? sanitize(designStyle) : "Görkezilmedi"}
 
 🌐 <b>Saýt URL:</b> ${existingUrl ? sanitize(existingUrl) : "Ýok"}
 🏭 <b>Pudak:</b> ${industry ? sanitize(industry) : "Görkezilmedi"}
@@ -81,15 +63,10 @@ ${sanitize(message)}
 
   try {
     await sendTelegramMessage(telegramMessage);
-
-    const response = SubmitContactFormResponse.parse({
-      success: true,
-      message: "Habar üstünlikli iberildi!",
-    });
-    res.json(response);
+    res.json(SubmitContactFormResponse.parse({ success: true, message: "Habar üstünlikli iberildi!" }));
   } catch (err) {
     req.log.error({ err }, "Failed to send Telegram message");
-    res.status(500).json({ error: "Failed to send message", details: "Telegram service error" });
+    res.status(500).json({ error: "Failed to send message" });
   }
 });
 

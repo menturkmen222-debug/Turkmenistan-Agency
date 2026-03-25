@@ -13,7 +13,7 @@ export function AIChatWidget() {
   const [showBubble, setShowBubble] = useState(false);
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<{role: ChatMessageRole, content: string}[]>([
-    { role: ChatMessageRole.assistant, content: "Salam! 👋 Men Ýeňiliň akylly kömekçisidirin. Saýt döretmek, bahalar ýa-da hyzmatlarymyz barada islendik soralyňyza jogap berip bilerin!" }
+    { role: ChatMessageRole.assistant, content: "Salam! 👋 Men ÝEŇIL agentliginiň AI kömekçisidirin.\n\nBiz web dizaýn, PWA we AI integrasiýasy bilen meşgullanýarys. Bahalarymyz $199-dan başlaýar; $599-lyk paketda bolsa logo we 3 ýyllyk domen SOWGAT berilýär! 🎁\n\n5 dilde kömek edip bilerin: Türkmençe, Rusça, Iňlisçe, Özbekçe, Türkçe." }
   ]);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -70,9 +70,9 @@ export function AIChatWidget() {
             onClick={handleOpen}
           >
             <p className="text-sm font-medium text-foreground pr-4">
-              Kömek gerekmi? 🤔
+              Salam! Kömek gerekmi? 🤖
               <br />
-              <span className="text-xs text-muted">Islendik soralyňyza jogap berip bilerin!</span>
+              <span className="text-xs text-muted">5 dilde jogap berýärin: TK · RU · EN · UZ · TR</span>
             </p>
             <button 
               className="absolute top-2 right-2 text-muted hover:text-foreground transition-colors"
@@ -101,8 +101,8 @@ export function AIChatWidget() {
                   <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-surface-2 rounded-full" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-foreground">Ýeňil Kömekçisi</h3>
-                  <p className="text-xs text-muted">Online</p>
+                  <h3 className="font-bold text-foreground">Ýeňil AI Kömekçisi</h3>
+                  <p className="text-xs text-muted">TK · RU · EN · UZ · TR — Online 🟢</p>
                 </div>
               </div>
               <button 
