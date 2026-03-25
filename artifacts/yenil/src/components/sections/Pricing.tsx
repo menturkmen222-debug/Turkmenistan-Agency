@@ -320,17 +320,6 @@ export function Pricing() {
 
         </div>
 
-        {/* Bottom trust note */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="mt-12 text-center"
-        >
-          <p className="text-muted/70 text-sm">
-            💳 Töleg: nagt, kart, SWIFT, Western Union · 🔒 Kepillik: 100% pul yzyna gaýtarmak (ilkinji 7 gün)
-          </p>
-        </motion.div>
       </div>
     </section>
   );

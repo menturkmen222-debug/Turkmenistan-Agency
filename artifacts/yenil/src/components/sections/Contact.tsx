@@ -15,7 +15,7 @@ const INDUSTRIES = [
   "Syýahat / Myhmanhanalar", "Hukuk / Maslahat", "Beýlekiler"
 ];
 
-const CONTACT_METHODS = ["Telegram", "WhatsApp", "IMO", "Telefon", "Email"];
+const CONTACT_METHODS = ["Telegram", "IMO", "Telefon", "Email"];
 
 const contactSchema = z.object({
   name: z.string().min(2, "Adyňyz hökmany"),

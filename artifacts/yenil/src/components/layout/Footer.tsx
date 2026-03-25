@@ -1,4 +1,4 @@
-import { Send, Video } from 'lucide-react';
+import { Send } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n';
 
 function TikTokIcon() {
@@ -66,15 +66,6 @@ export function Footer() {
               >
                 <ImoIcon />
               </a>
-              <a
-                href="https://www.tiktok.com/@yenil.ru"
-                target="_blank"
-                rel="noopener noreferrer"
-                title="Video"
-                className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-muted hover:text-gold hover:border-gold transition-colors"
-              >
-                <Video className="w-4 h-4" />
-              </a>
             </div>
           </div>
 
@@ -97,15 +88,7 @@ export function Footer() {
             <a href="mailto:yenil.ru.tkm@gmail.com" className="text-muted hover:text-white transition-colors">
               yenil.ru.tkm@gmail.com
             </a>
-            <a href="https://t.me/yenil_ru" target="_blank" rel="noopener noreferrer" className="text-muted hover:text-white transition-colors">
-              Telegram: @yenil_ru
-            </a>
-            <a href="https://www.tiktok.com/@yenil.ru" target="_blank" rel="noopener noreferrer" className="text-muted hover:text-white transition-colors">
-              TikTok: @yenil.ru
-            </a>
-            <a href="https://s.imoim.net/DNCXX6" target="_blank" rel="noopener noreferrer" className="text-muted hover:text-white transition-colors">
-              IMO: @yenil.ru
-            </a>
+            <p className="text-muted">Aşgabat, Türkmenistan</p>
           </div>
         </div>
 
