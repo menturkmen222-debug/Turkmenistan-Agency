@@ -1,7 +1,7 @@
-import { Router, type IRouter } from "express";
+import { Router } from "express";
 import { TrackAnalyticsEventBody, TrackAnalyticsEventResponse } from "@workspace/api-zod";
 
-const router: IRouter = Router();
+const router = Router();
 
 // Only these events are forwarded to Telegram — everything else is silently accepted but dropped
 const TELEGRAM_EVENTS = new Set(["contact_form_submit", "ai_chat_opened"]);

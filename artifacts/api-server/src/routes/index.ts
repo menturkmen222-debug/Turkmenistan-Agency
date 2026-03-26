@@ -1,10 +1,10 @@
-import { Router, type IRouter } from "express";
-import healthRouter from "./health";
-import chatRouter from "./chat";
-import contactRouter from "./contact";
-import analyticsRouter from "./analytics";
+import { Router } from "express";
+import healthRouter from "./health.js";
+import chatRouter from "./chat.js";
+import contactRouter from "./contact.js";
+import analyticsRouter from "./analytics.js";
 
-const router: IRouter = Router();
+const router = Router();
 
 router.use(healthRouter);
 router.use(chatRouter);

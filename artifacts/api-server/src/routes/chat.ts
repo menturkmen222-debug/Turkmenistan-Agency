@@ -1,8 +1,8 @@
-import { Router, type IRouter } from "express";
+import { Router } from "express";
 import Groq from "groq-sdk";
 import { SendChatMessageBody, SendChatMessageResponse } from "@workspace/api-zod";
 
-const router: IRouter = Router();
+const router = Router();
 
 let groq: Groq | null = null;
 
@@ -112,7 +112,7 @@ router.post("/chat", async (req, res) => {
       model: "llama-3.3-70b-versatile",
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
-        ...messages.map((m) => ({ role: m.role as "user" | "assistant", content: m.content })),
+        ...messages.map((m: { role: string; content: string }) => ({ role: m.role as "user" | "assistant", content: m.content })),
       ],
       temperature: 0.7,
       max_tokens: 500,

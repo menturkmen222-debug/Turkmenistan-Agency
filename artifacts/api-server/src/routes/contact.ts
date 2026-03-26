@@ -1,7 +1,7 @@
-import { Router, type IRouter } from "express";
+import { Router } from "express";
 import { SubmitContactFormBody, SubmitContactFormResponse } from "@workspace/api-zod";
 
-const router: IRouter = Router();
+const router = Router();
 
 function sanitize(str: string): string {
   return str.replace(/[<>]/g, "").trim().slice(0, 2000);
