@@ -41,10 +41,13 @@ export function Header() {
         {/* Logo */}
         <a href="#" className="flex items-center group">
           <img 
-            src={`${import.meta.env.BASE_URL}images/yenil-logo.png`} 
+            src={`${import.meta.env.BASE_URL}images/yenil-mark-new.png`} 
             alt="Ýeňil Logo" 
-            className="h-8 md:h-10 w-auto transition-transform group-hover:scale-105"
-            style={{ filter: 'hue-rotate(-70deg) saturate(2) brightness(1.8)' }}
+            className="h-14 md:h-16 w-auto transition-transform group-hover:scale-105"
+            style={{ 
+              filter: 'hue-rotate(-100deg) saturate(1.8) brightness(1.3)',
+              mixBlendMode: 'screen'
+            }}
           />
         </a>
 
