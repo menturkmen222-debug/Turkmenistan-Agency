@@ -43,8 +43,8 @@ export function Header() {
           <img 
             src={`${import.meta.env.BASE_URL}images/yenil-logo.png`} 
             alt="Ýeňil Logo" 
-            className="h-16 md:h-20 w-auto transition-transform group-hover:scale-105"
-            style={{ filter: 'hue-rotate(-70deg) saturate(2) brightness(1.8)', mixBlendMode: 'screen' }}
+            className="h-20 md:h-28 w-auto transition-transform group-hover:scale-105"
+            style={{ filter: 'hue-rotate(-70deg) saturate(2) brightness(1.8)' }}
           />
         </a>
 
