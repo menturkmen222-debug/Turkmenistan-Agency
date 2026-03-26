@@ -1,10 +1,10 @@
-import express from "express";
+import express, { type Request, type Response, type NextFunction } from "express";
 import cors from "cors";
 import router from "../artifacts/api-server/src/routes";
 
 const app = express();
 
-app.use((req: any, _res, next) => {
+app.use((req: Request, _res: Response, next: NextFunction) => {
   req.log = {
     info: (obj: unknown, msg?: string) => console.log(msg ?? "", obj),
     warn: (obj: unknown, msg?: string) => console.warn(msg ?? "", obj),
