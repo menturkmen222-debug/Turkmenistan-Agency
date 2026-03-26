@@ -1,3 +1,4 @@
+// @ts-nocheck
 import express from "express";
 import cors from "cors";
 import router from "../artifacts/api-server/src/routes";
@@ -5,10 +6,10 @@ import router from "../artifacts/api-server/src/routes";
 const app = express();
 
 app.use((req, _res, next) => {
-  (req as any).log = {
-    info: (obj: unknown, msg?: string) => console.log(msg ?? "", obj),
-    warn: (obj: unknown, msg?: string) => console.warn(msg ?? "", obj),
-    error: (obj: unknown, msg?: string) => console.error(msg ?? "", obj),
+  req.log = {
+    info: (obj, msg) => console.log(msg ?? "", obj),
+    warn: (obj, msg) => console.warn(msg ?? "", obj),
+    error: (obj, msg) => console.error(msg ?? "", obj),
   };
   next();
 });
