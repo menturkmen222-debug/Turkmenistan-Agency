@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, X, Info } from 'lucide-react';
+import { Check, Info } from 'lucide-react';
 
 interface ModalProps {
   tier: 'starter' | 'pro' | null;
@@ -137,7 +137,7 @@ export function Pricing() {
             Taslamanyňyz üçin dogry paket saýlaň
           </h2>
           <p className="text-muted text-lg">
-            Aşakdaky bahalara hiç hili goşmaça töleg ýok. Ähli zat açyk we dury.
+            Saýlaň. Sargyt beriň. Üstünlik gazanyň.
           </p>
         </div>
 
@@ -160,7 +160,7 @@ export function Pricing() {
             <div className="mb-2 flex items-baseline gap-2">
               <span className="text-4xl font-mono font-bold text-emerald-400">$199</span>
               <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-400/15 text-emerald-400 font-bold">
-                Save $51
+                $51 tygşytla
               </span>
             </div>
             <p className="text-muted text-sm mb-1">≈ 3 781 TMT</p>
@@ -170,14 +170,15 @@ export function Pricing() {
             </p>
 
             <ul className="space-y-3 mb-6 flex-1">
-              {['1 sahypa Landing Page', 'Mobil laýyk dizaýn', 'Öňünden taýýar tema', 'Gysgaça SEO', '1 aý tehniki goldaw'].map((f, i) => (
+              {[
+                '1-3 sahypa Premium Landing Page',
+                'Mobil ekrana doly maslaşan dizaýn',
+                'Esasy SEO we ýokary tizlik',
+                'Müşderi sargyt formasy',
+                '1 aý tehniki goldaw',
+              ].map((f, i) => (
                 <li key={i} className="flex items-center gap-3 text-white/90 text-sm">
                   <Check className="w-4 h-4 text-primary-light flex-shrink-0" /> {f}
-                </li>
-              ))}
-              {['Köp sahypa', 'Domen & Hosting (aýratyn)'].map((f, i) => (
-                <li key={i} className="flex items-center gap-3 text-muted text-sm">
-                  <X className="w-4 h-4 text-muted/40 flex-shrink-0" /> {f}
                 </li>
               ))}
             </ul>
@@ -215,7 +216,7 @@ export function Pricing() {
 
             <div className="p-8 md:p-10 flex flex-col flex-1">
               <div className="inline-flex px-3 py-1 rounded-full bg-primary/20 text-primary-light text-sm font-bold mb-6 mt-3 self-start">
-                PRO E-COMMERCE
+                PRO ONLAÝN DÜKAN
               </div>
 
               <div className="mb-2">
@@ -224,7 +225,7 @@ export function Pricing() {
               <div className="mb-2 flex items-baseline gap-2 flex-wrap">
                 <span className="text-5xl font-mono font-bold text-gold drop-shadow-md">$599</span>
                 <span className="text-xs px-2 py-0.5 rounded-full bg-gold/15 text-gold font-bold whitespace-nowrap">
-                  Save $201 · Limited
+                  $201 tygşytla · Çäklendirilen
                 </span>
               </div>
               <p className="text-primary-light text-sm mb-1">≈ 11 381 TMT</p>
@@ -245,15 +246,12 @@ export function Pricing() {
 
               <ul className="space-y-3 mb-6 flex-1">
                 {[
-                  '5-10 sahypa doly saýt',
-                  'Özboluşly premium dizaýn',
-                  'E-Commerce (onlaýn dükan)',
-                  'Animasiýa & interaktiw elementler',
-                  'Doly SEO optimizasiýasy',
-                  'AI Chat integrasiýasy',
-                  'CMS — özüňiz üýtgedip bilersiňiz',
-                  'Domen + Hosting goşulan ✓',
-                  '3 aý tehniki goldaw',
+                  '5-10 sahypaly Premium E-Commerce',
+                  'CMS dolandyryş paneli (Özüňiz aňsat üýtgedip bilersiňiz)',
+                  'AI Chatbot integrasiýasy (24/7 awtomat satuw)',
+                  'Premium animasiýalar we interaktiw dizaýn',
+                  'Doly SEO we Ýokary tizlik (99% Performance)',
+                  '3 aý VIP tehniki goldaw',
                 ].map((f, i) => (
                   <li key={i} className="flex items-start gap-3 text-white text-sm">
                     <Check className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" /> {f}
@@ -298,14 +296,12 @@ export function Pricing() {
 
             <ul className="space-y-3 mb-6 flex-1">
               {[
-                'Çäksiz sahypalar',
-                'E-commerce we töleg ulgamy',
-                'PWA & Mobil applikasiýa',
-                'API integrasiýalary',
-                'Köp dilli goldaw (5 dil)',
-                'AI integrasiýasy',
-                '24/7 tehniki goldaw',
-                'Dedicated server & CDN',
+                'Çäksiz sahypalar we aýratyn funksionallyk',
+                'PWA (Telefona gurnalýan web-applikasiýa)',
+                'Kämil API we Töleg ulgamlarynyň integrasiýasy',
+                'Işlän dilli ulgam we Kämil AI Agent',
+                'Şahsy (Dedicated) Server we CDN',
+                '24/7 Premium tehniki goldaw',
               ].map((f, i) => (
                 <li key={i} className="flex items-center gap-3 text-white/90 text-sm">
                   <Check className="w-4 h-4 text-primary-light flex-shrink-0" /> {f}
