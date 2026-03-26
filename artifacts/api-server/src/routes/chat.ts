@@ -128,7 +128,7 @@ router.post("/chat", async (req, res) => {
 
     res.json(SendChatMessageResponse.parse({ message: responseMessage, role: "assistant" }));
   } catch (err) {
-    req.log.error({ err }, "Groq API error");
+    (req as any).log?.error({ err }, "Groq API error") ?? console.error("Groq API error", err);
     res.status(500).json({ error: "AI service temporarily unavailable" });
   }
 });

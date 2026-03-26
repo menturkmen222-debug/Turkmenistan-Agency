@@ -65,7 +65,7 @@ ${sanitize(message)}
     await sendTelegramMessage(telegramMessage);
     res.json(SubmitContactFormResponse.parse({ success: true, message: "Habar üstünlikli iberildi!" }));
   } catch (err) {
-    req.log.error({ err }, "Failed to send Telegram message");
+    (req as any).log?.error({ err }, "Failed to send Telegram message") ?? console.error("Failed to send Telegram message", err);
     res.status(500).json({ error: "Failed to send message" });
   }
 });
