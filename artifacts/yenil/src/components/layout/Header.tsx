@@ -39,16 +39,13 @@ export function Header() {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
         {/* Logo */}
-        <a href="#" className="flex items-center gap-2 group">
+        <a href="#" className="flex items-center group">
           <img 
-            src={`${import.meta.env.BASE_URL}images/yenil-mark.png`} 
+            src={`${import.meta.env.BASE_URL}images/yenil-logo.png`} 
             alt="Ýeňil Logo" 
-            className="h-8 w-8 object-contain transition-transform group-hover:scale-110"
-            style={{ filter: 'hue-rotate(-70deg) saturate(1.6) brightness(0.85)' }}
+            className="h-12 w-auto object-contain transition-transform group-hover:scale-105"
+            style={{ filter: 'hue-rotate(-70deg) saturate(2) brightness(1.5)', mixBlendMode: 'screen' }}
           />
-          <span className="font-display font-bold text-2xl tracking-tight text-white">
-            Ýeňil<span className="text-gold">.</span>
-          </span>
         </a>
 
         {/* Desktop Nav */}
