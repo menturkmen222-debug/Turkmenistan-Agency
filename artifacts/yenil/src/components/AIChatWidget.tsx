@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Send } from 'lucide-react';
+import { X, Send, Bot } from 'lucide-react';
 import { useSendChatMessage } from '@workspace/api-client-react';
 import { useTranslation } from '@/lib/i18n';
 import { useAnalytics } from '@/hooks/use-analytics';
@@ -47,7 +47,7 @@ export function AIChatWidget() {
     trackEvent('ai_chat_message', { messageLength: text.length });
 
     mutate({ data: { messages: newMessages, locale } }, {
-      onSuccess: (res) => {
+      onSuccess: (res: { role: string; message: string }) => {
         setMessages([...newMessages, { role: res.role as ChatMessageRole, content: res.message }]);
       },
       onError: () => {
