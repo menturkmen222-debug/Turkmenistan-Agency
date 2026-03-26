@@ -41,9 +41,10 @@ export function Header() {
         {/* Logo */}
         <a href="#" className="flex items-center gap-2 group">
           <img 
-            src={`${import.meta.env.BASE_URL}images/logo-mark.png`} 
+            src={`${import.meta.env.BASE_URL}images/yenil-mark.png`} 
             alt="Ýeňil Logo" 
-            className="h-8 w-8 object-contain transition-transform group-hover:scale-110" 
+            className="h-8 w-8 object-contain transition-transform group-hover:scale-110"
+            style={{ filter: 'hue-rotate(-70deg) saturate(1.6) brightness(0.85)' }}
           />
           <span className="font-display font-bold text-2xl tracking-tight text-white">
             Ýeňil<span className="text-gold">.</span>

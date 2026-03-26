@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bot, X, Send, MoreHorizontal } from 'lucide-react';
+import { X, Send } from 'lucide-react';
 import { useSendChatMessage } from '@workspace/api-client-react';
 import { useTranslation } from '@/lib/i18n';
 import { useAnalytics } from '@/hooks/use-analytics';
@@ -182,11 +182,15 @@ export function AIChatWidget() {
 
       <button
         onClick={handleOpen}
-        className={`w-14 h-14 rounded-full shadow-lg shadow-black flex items-center justify-center transition-all duration-300 ${
-          isOpen ? 'bg-surface-2 text-primary rotate-90 scale-0 opacity-0' : 'bg-gradient-to-tr from-primary-dark to-primary text-white hover:scale-110 hover:shadow-primary/25'
+        className={`w-16 h-16 rounded-full overflow-hidden shadow-xl shadow-black/60 transition-all duration-300 ${
+          isOpen ? 'scale-0 opacity-0' : 'hover:scale-110 hover:shadow-primary/30'
         }`}
       >
-        <Bot className="w-7 h-7" />
+        <img
+          src={`${import.meta.env.BASE_URL}images/ai-bot-icon.png`}
+          alt="AI Kömekçi"
+          className="w-full h-full object-cover object-center scale-105"
+        />
       </button>
     </div>
   );

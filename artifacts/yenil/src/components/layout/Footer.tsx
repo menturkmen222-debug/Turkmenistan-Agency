@@ -32,7 +32,7 @@ export function Footer() {
           {/* Brand */}
           <div className="flex flex-col items-start">
             <a href="#" className="flex items-center gap-2 mb-4">
-              <img src={`${import.meta.env.BASE_URL}images/logo-mark.png`} alt="Logo" className="w-10 h-10 object-contain" />
+              <img src={`${import.meta.env.BASE_URL}images/yenil-mark.png`} alt="Logo" className="w-10 h-10 object-contain" style={{ filter: 'hue-rotate(-70deg) saturate(1.6) brightness(0.85)' }} />
               <span className="font-display font-bold text-3xl text-white">Ýeňil<span className="text-gold">.</span></span>
             </a>
             <p className="text-muted max-w-sm mb-6 font-medium">
