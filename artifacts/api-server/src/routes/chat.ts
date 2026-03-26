@@ -4,7 +4,17 @@ import { SendChatMessageBody, SendChatMessageResponse } from "@workspace/api-zod
 
 const router: IRouter = Router();
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+let groq: Groq | null = null;
+
+function getGroq(): Groq {
+  if (!groq) {
+    if (!process.env.GROQ_API_KEY) {
+      throw new Error("GROQ_API_KEY is not configured");
+    }
+    groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+  }
+  return groq;
+}
 
 const SYSTEM_PROMPT = `Sen ÝEŇIL web agentliginiň akylly kömekçisisin.
 5 dilde suwara gepleşýärsiň: Türkmençe (esasy), Rus, Iňlis, Özbek we Türk.
@@ -98,7 +108,7 @@ router.post("/chat", async (req, res) => {
   const { messages, locale } = parsed.data;
 
   try {
-    const completion = await groq.chat.completions.create({
+    const completion = await getGroq().chat.completions.create({
       model: "llama-3.3-70b-versatile",
       messages: [
         { role: "system", content: SYSTEM_PROMPT },
