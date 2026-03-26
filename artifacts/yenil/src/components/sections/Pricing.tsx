@@ -23,8 +23,8 @@ function PricingModal({ tier, onClose }: ModalProps) {
     ],
     note: "Domen we Hosting bu baha degişli däl.",
     elif: "Biz size dünýä derejesinde saýt gurup berýäris. Emma saýtyň internet ady (domen) we saklanýan ýeri (hosting) — bu sizin maýaňyz, ony öziňiz saýlap, aýratyn töleýärsiňiz.",
-    vision: "Domen ady — markaňyzyň sanly dünýädäki ömürlik salgysydyr. Ol 3-10 ýyl üçin alynýar. Arzan domen hem ýok — ýöne gymmat hem däl, ortaça ýylda $10-15.",
-    why: "Bu baha — dünýä derejesindäki kod we dizaýn üçin. Bazarda $30-50-a 'saýt' bar, ýöne ol saýt müşderi getirmeýär. Biz bolsa siziň üçin 24 sagat işleýän satuwçy gurýarys.",
+    vision: "Domen ady — markaňyzyň sanly dünýädäki ömürlik salgysydyr. Ol 3-10 ýyl üçin alynýar we aýratyn tölenýär.",
+    why: "Bu baha — dünýä derejesindäki kod we dizaýn üçin. Hil bilen içi doly, müşderi getirýän saýt — bu siziň üçin 24 sagat işleýän satuwçy.",
   } : {
     headline: "Hemme Zat Taýýar — Açary Eline Al",
     badge: "PRO ONLAÝN DÜKAN — $599",

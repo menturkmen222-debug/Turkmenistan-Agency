@@ -118,11 +118,11 @@ export function AIChatWidget() {
               {messages.map((msg, i) => (
                 <div key={i} className={`flex ${msg.role === ChatMessageRole.user ? 'justify-end' : 'justify-start'}`}>
                   <div className={`max-w-[85%] p-3 rounded-2xl ${
-                    msg.role === ChatMessageRole.user 
-                      ? 'bg-primary text-primary-foreground rounded-tr-sm' 
+                    msg.role === ChatMessageRole.user
+                      ? 'bg-primary text-primary-foreground rounded-tr-sm'
                       : 'bg-surface-2 border border-border text-foreground rounded-tl-sm'
                   }`}>
-                    <p className="text-sm leading-relaxed">{msg.content}</p>
+                    <p className="text-sm leading-relaxed">{msg.content.replace(/\*+/g, '').replace(/#+\s?/g, '').trim()}</p>
                   </div>
                 </div>
               ))}

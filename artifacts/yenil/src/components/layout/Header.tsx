@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n';
@@ -8,6 +8,7 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLangMenuOpen, setIsLangMenuOpen] = useState(false);
   const { t, locale, setLocale } = useTranslation();
+  const lastScrollY = useRef(0);
 
   const languages = [
     { code: 'tk', label: 'Türkmen', flag: '🇹🇲' },
@@ -18,8 +19,15 @@ export function Header() {
   ];
 
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
-    window.addEventListener('scroll', handleScroll);
+    const handleScroll = () => {
+      const currentY = window.scrollY;
+      setIsScrolled(currentY > 20);
+      if (currentY > lastScrollY.current && currentY > 60) {
+        setIsMobileMenuOpen(false);
+      }
+      lastScrollY.current = currentY;
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -32,30 +40,35 @@ export function Header() {
   ];
 
   return (
-    <header 
+    <header
       className={`fixed top-0 w-full z-50 transition-all duration-300 ${
         isScrolled ? 'glass-header py-3' : 'bg-transparent py-5'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-        {/* Logo */}
-        <a href="#" className="flex items-center group">
-          <img 
-            src={`${import.meta.env.BASE_URL}images/yenil-mark-new.png`} 
-            alt="Ýeňil Logo" 
-            className="h-14 md:h-16 w-auto transition-transform group-hover:scale-105"
-            style={{ 
-              filter: 'hue-rotate(-100deg) saturate(1.8) brightness(1.3)',
-              mixBlendMode: 'screen'
-            }}
-          />
+        {/* Logo — only visible at top */}
+        <a href="#" className="flex items-center group" style={{ minWidth: isScrolled ? 0 : undefined }}>
+          <AnimatePresence initial={false}>
+            {!isScrolled && (
+              <motion.img
+                key="logo"
+                src={`${import.meta.env.BASE_URL}images/yenil-mark-new.png`}
+                alt="Ýeňil Logo"
+                initial={{ opacity: 0, width: 0 }}
+                animate={{ opacity: 1, width: 'auto' }}
+                exit={{ opacity: 0, width: 0 }}
+                transition={{ duration: 0.25 }}
+                className="h-12 md:h-14 w-auto transition-transform group-hover:scale-105"
+              />
+            )}
+          </AnimatePresence>
         </a>
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8">
           {navLinks.map((link) => (
-            <a 
-              key={link.href} 
+            <a
+              key={link.href}
               href={link.href}
               className="text-sm font-medium text-white/80 hover:text-white transition-colors relative group"
             >
@@ -68,7 +81,7 @@ export function Header() {
         {/* Desktop Actions */}
         <div className="hidden md:flex items-center gap-4">
           <div className="relative">
-            <button 
+            <button
               onClick={() => setIsLangMenuOpen(!isLangMenuOpen)}
               className="flex items-center gap-2 text-sm text-white/80 hover:text-white px-2 py-1 rounded-md transition-colors"
             >
@@ -78,7 +91,7 @@ export function Header() {
             </button>
             <AnimatePresence>
               {isLangMenuOpen && (
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 10 }}
@@ -100,8 +113,8 @@ export function Header() {
               )}
             </AnimatePresence>
           </div>
-          
-          <a 
+
+          <a
             href="#contact"
             className="px-5 py-2.5 rounded-full text-sm font-semibold bg-gradient-to-r from-primary to-primary-light text-white shadow-lg shadow-primary/20 hover:shadow-primary/40 hover:scale-105 transition-all duration-300 border border-gold/30"
           >
@@ -110,29 +123,34 @@ export function Header() {
         </div>
 
         {/* Mobile Toggle */}
-        <button 
+        <button
           className="md:hidden text-white p-2"
-          onClick={() => setIsMobileMenuOpen(true)}
+          onClick={() => setIsMobileMenuOpen(v => !v)}
         >
-          <Menu className="w-6 h-6" />
+          {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
         </button>
       </div>
 
-      {/* Mobile Menu Overlay */}
+      {/* Mobile Menu Overlay — z-[200] so it covers the AI chat widget */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[100] bg-background/95 backdrop-blur-xl flex flex-col"
+            className="fixed inset-0 z-[200] bg-background/95 backdrop-blur-xl flex flex-col"
           >
-            <div className="p-5 flex justify-end">
+            <div className="p-5 flex justify-between items-center">
+              <img
+                src={`${import.meta.env.BASE_URL}images/yenil-mark-new.png`}
+                alt="Ýeňil Logo"
+                className="h-10 w-auto"
+              />
               <button onClick={() => setIsMobileMenuOpen(false)} className="text-white p-2">
                 <X className="w-8 h-8" />
               </button>
             </div>
-            
+
             <div className="flex-1 flex flex-col items-center justify-center gap-8 pb-20">
               {navLinks.map((link, i) => (
                 <motion.a
@@ -140,18 +158,18 @@ export function Header() {
                   href={link.href}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.1 }}
+                  transition={{ delay: i * 0.08 }}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="font-display text-3xl text-white hover:text-gold transition-colors"
                 >
                   {link.label}
                 </motion.a>
               ))}
-              
-              <motion.div 
+
+              <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
+                transition={{ delay: 0.45 }}
                 className="flex items-center gap-4 mt-8"
               >
                 {languages.map(lang => (

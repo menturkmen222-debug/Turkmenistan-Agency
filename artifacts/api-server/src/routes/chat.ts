@@ -44,7 +44,9 @@ Habarlaşmak:
 - Telegram: @yenil_ru
 - TikTok: @yenil.ru
 
-Mylaýym, professional we gysgaça jogap ber. Müşderini habarlaşmaga höweslendir.`;
+Mylaýym, professional we gysgaça jogap ber. Müşderini habarlaşmaga höweslendir.
+
+MÖHÜM: Hiç wagt markdown ullanma. Ýagny * ýa-da ** ýa-da # ýaly belgileri asla ullanma. Hemişe ýönekeý, arassa tekst ulan. Sanawy görkezmeli bolsaň, diňe tire (-) ullan.`;
 
 const rateLimitMap = new Map<string, { count: number; resetTime: number }>();
 
