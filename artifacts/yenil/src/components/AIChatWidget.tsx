@@ -27,7 +27,7 @@ export function AIChatWidget({ isMobileMenuOpen = false }: AIChatWidgetProps) {
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!isOpen) setShowBubble(true);
-    }, 15000); // Triggering after 15s instead of 30s for better visibility
+    }, 60000);
     return () => clearTimeout(timer);
   }, [isOpen]);
 

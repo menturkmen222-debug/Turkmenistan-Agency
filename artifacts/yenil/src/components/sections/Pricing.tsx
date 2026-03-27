@@ -35,7 +35,7 @@ function PricingModal({ tier, onClose }: ModalProps) {
       { icon: "✅", text: "Premium animasiýalar we interaktiw dizaýn" },
       { icon: "✅", text: "Doly SEO we Ýokary tizlik (99% Performance)" },
       { icon: "✅", text: "3 aý VIP tehniki goldaw" },
-      { icon: "🎁", text: "3 ýyllyk MUGT domen — sowgat!" },
+      { icon: "🎁", text: "Domen — sowgat!" },
       { icon: "🎁", text: "Professional Logo dizaýny — sowgat!" },
       { icon: "✅", text: "Hosting we Google/Yandex indeksirleme — hemme zat içinde" },
     ],
@@ -232,7 +232,7 @@ export function Pricing() {
               {/* Gift badges */}
               <div className="flex flex-wrap gap-2 my-4">
                 <span className="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-bold">
-                  🎁 3 ýyllyk MUGT domen!
+                  🎁 Domen — sowgat!
                 </span>
                 <span className="px-3 py-1 rounded-full bg-purple-500/15 border border-purple-500/30 text-purple-300 text-xs font-bold">
                   🎁 Professional Logo — SOWGAT!
