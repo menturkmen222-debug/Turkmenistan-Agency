@@ -2,37 +2,9 @@ import { motion } from 'framer-motion';
 import { ShieldCheck, Zap, Diamond } from 'lucide-react';
 
 export function Stats() {
-  const stats = [
-    { num: "50+", label: "Taslama Tamamlanan" },
-    { num: "24", label: "Sagat Goldaw" },
-    { num: "5", label: "Dil Goldawy" },
-    { num: "100%", label: "Kepillik Hili" }
-  ];
-
   return (
     <section className="py-24 bg-background border-y border-border">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        
-        {/* Stats Row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-24">
-          {stats.map((stat, i) => (
-            <motion.div 
-              key={i}
-              initial={{ opacity: 0, scale: 0.8 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ delay: i * 0.1, type: "spring" }}
-              className="text-center"
-            >
-              <div className="text-4xl md:text-5xl lg:text-6xl font-mono font-bold text-white mb-2 drop-shadow-[0_0_10px_rgba(212,168,67,0.3)]">
-                {stat.num}
-              </div>
-              <div className="text-sm md:text-base text-gold font-medium uppercase tracking-wider">
-                {stat.label}
-              </div>
-            </motion.div>
-          ))}
-        </div>
 
         {/* Why Us */}
         <div id="how-it-works" className="relative">
