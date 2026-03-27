@@ -8,9 +8,6 @@ export function Stats() {
 
         {/* Why Us */}
         <div id="how-it-works" className="relative">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 bg-primary/10 text-primary-light text-sm font-medium mb-6">
-            🌍 Global Hilli, Ýerli Dilli
-          </div>
           <h2 className="text-4xl md:text-5xl font-display font-bold text-white mb-12">
             Näme üçin Ýeňil?
           </h2>
