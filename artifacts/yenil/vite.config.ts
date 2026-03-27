@@ -27,12 +27,27 @@ if (!isProduction && !process.env.BASE_PATH) {
   );
 }
 
+// Resolve the canonical origin for Open Graph absolute URLs.
+// REPLIT_DOMAINS is comma-separated; pick the first (primary) one.
+function resolveOgOrigin(): string {
+  const domains = process.env.REPLIT_DOMAINS ?? process.env.REPLIT_DEV_DOMAIN ?? "";
+  const primary = domains.split(",")[0]?.trim();
+  return primary ? `https://${primary}` : "";
+}
+
 export default defineConfig({
   base: basePath,
   plugins: [
     react(),
     tailwindcss(),
     runtimeErrorOverlay(),
+    // Inject the absolute origin into index.html at serve/build time
+    {
+      name: "inject-og-origin",
+      transformIndexHtml(html: string) {
+        return html.replace(/__OG_ORIGIN__/g, resolveOgOrigin());
+      },
+    },
     ...(process.env.NODE_ENV !== "production" &&
     process.env.REPL_ID !== undefined
       ? [
