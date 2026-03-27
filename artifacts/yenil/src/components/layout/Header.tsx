@@ -41,11 +41,17 @@ export function Header({ isMobileMenuOpen, setIsMobileMenuOpen }: HeaderProps) {
   }, [setIsMobileMenuOpen]);
 
   return (
-    <header className="fixed top-0 w-full z-50">
-      {/* Bar — always transparent, just logo + hamburger */}
-      <div className="flex items-center justify-between px-5 py-4 md:px-10">
+    /*
+     * The outer element spans the full viewport width but must NOT intercept
+     * pointer events in the empty transparent regions — only the concrete
+     * children (bar strip and dropdown panel) should be interactive.
+     */
+    <div className="fixed top-0 left-0 right-0 z-50 pointer-events-none">
 
-        {/* Logo — always visible */}
+      {/* ── Top bar: logo · lang flags · hamburger ─────────────────────── */}
+      <div className="pointer-events-auto flex items-center justify-between px-5 py-4 md:px-10">
+
+        {/* Logo */}
         <a href="#home" className="flex-shrink-0">
           <img
             src={`${import.meta.env.BASE_URL}images/yenil-mark-new.png`}
@@ -54,39 +60,61 @@ export function Header({ isMobileMenuOpen, setIsMobileMenuOpen }: HeaderProps) {
           />
         </a>
 
-        {/* Hamburger button — all screen sizes */}
-        <button
-          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-          aria-label="Menyu"
-          className="w-11 h-11 flex items-center justify-center rounded-xl text-white hover:bg-white/10 transition-colors"
-        >
-          <AnimatePresence mode="wait" initial={false}>
-            {isMobileMenuOpen ? (
-              <motion.span
-                key="x"
-                initial={{ rotate: -90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: 90, opacity: 0 }}
-                transition={{ duration: 0.15 }}
+        {/* Right side: language flags + hamburger */}
+        <div className="flex items-center gap-2">
+
+          {/* Language flags — always visible */}
+          <div className="flex items-center gap-0.5">
+            {languages.map(lang => (
+              <button
+                key={lang.code}
+                onClick={() => setLocale(lang.code as any)}
+                title={lang.label}
+                className={`text-lg md:text-xl px-1 py-1 rounded-full border transition-all duration-150 ${
+                  locale === lang.code
+                    ? 'border-gold bg-gold/15 opacity-100 scale-110'
+                    : 'border-transparent opacity-40 hover:opacity-80'
+                }`}
               >
-                <X className="w-6 h-6" />
-              </motion.span>
-            ) : (
-              <motion.span
-                key="menu"
-                initial={{ rotate: 90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: -90, opacity: 0 }}
-                transition={{ duration: 0.15 }}
-              >
-                <Menu className="w-6 h-6" />
-              </motion.span>
-            )}
-          </AnimatePresence>
-        </button>
+                {lang.flag}
+              </button>
+            ))}
+          </div>
+
+          {/* Hamburger */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Menyu"
+            className="w-10 h-10 flex items-center justify-center rounded-xl text-white hover:bg-white/10 transition-colors ml-1"
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              {isMobileMenuOpen ? (
+                <motion.span
+                  key="x"
+                  initial={{ rotate: -90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: 90, opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <X className="w-6 h-6" />
+                </motion.span>
+              ) : (
+                <motion.span
+                  key="menu"
+                  initial={{ rotate: 90, opacity: 0 }}
+                  animate={{ rotate: 0, opacity: 1 }}
+                  exit={{ rotate: -90, opacity: 0 }}
+                  transition={{ duration: 0.15 }}
+                >
+                  <Menu className="w-6 h-6" />
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </button>
+        </div>
       </div>
 
-      {/* Dropdown panel — slides down with glass background */}
+      {/* ── Dropdown panel ──────────────────────────────────────────────── */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -94,12 +122,12 @@ export function Header({ isMobileMenuOpen, setIsMobileMenuOpen }: HeaderProps) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2, ease: 'easeOut' }}
-            className="mx-4 md:mx-10 rounded-2xl overflow-hidden"
+            className="pointer-events-auto mx-4 md:mx-10 rounded-2xl overflow-hidden"
             style={{
-              background: 'rgba(10, 26, 15, 0.92)',
-              backdropFilter: 'blur(20px)',
+              background: 'rgba(10, 26, 15, 0.93)',
+              backdropFilter: 'blur(24px)',
               border: '1px solid rgba(255,255,255,0.08)',
-              boxShadow: '0 8px 40px rgba(0,0,0,0.5)',
+              boxShadow: '0 8px 40px rgba(0,0,0,0.55)',
             }}
           >
             {/* Nav links */}
@@ -119,28 +147,12 @@ export function Header({ isMobileMenuOpen, setIsMobileMenuOpen }: HeaderProps) {
               ))}
             </div>
 
-            {/* Footer row: lang + CTA */}
-            <div className="px-6 pb-5 flex items-center justify-between border-t border-white/8 pt-4">
-              <div className="flex items-center gap-1.5">
-                {languages.map(lang => (
-                  <button
-                    key={lang.code}
-                    onClick={() => { setLocale(lang.code as any); setIsMobileMenuOpen(false); }}
-                    title={lang.label}
-                    className={`text-xl p-1 rounded-full border transition-all ${
-                      locale === lang.code
-                        ? 'border-gold bg-gold/10 opacity-100 scale-110'
-                        : 'border-transparent opacity-40 hover:opacity-75'
-                    }`}
-                  >
-                    {lang.flag}
-                  </button>
-                ))}
-              </div>
+            {/* CTA button */}
+            <div className="px-6 pb-5">
               <a
                 href="#contact"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="px-4 py-2 rounded-full text-sm font-semibold bg-gradient-to-r from-primary to-primary-light text-white border border-gold/30 hover:scale-105 transition-transform"
+                className="block w-full py-3 rounded-xl text-sm font-semibold text-center bg-gradient-to-r from-primary to-primary-light text-white border border-gold/30 hover:scale-[1.02] transition-transform"
               >
                 {t('nav.cta')}
               </a>
@@ -148,6 +160,6 @@ export function Header({ isMobileMenuOpen, setIsMobileMenuOpen }: HeaderProps) {
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </div>
   );
 }
