@@ -6,7 +6,11 @@ import { useTranslation } from '@/lib/i18n';
 import { useAnalytics } from '@/hooks/use-analytics';
 import { ChatMessageRole } from '@workspace/api-client-react';
 
-export function AIChatWidget() {
+interface AIChatWidgetProps {
+  isMobileMenuOpen?: boolean;
+}
+
+export function AIChatWidget({ isMobileMenuOpen = false }: AIChatWidgetProps) {
   const { t, locale } = useTranslation();
   const { trackEvent } = useAnalytics();
   const [isOpen, setIsOpen] = useState(false);
@@ -59,7 +63,11 @@ export function AIChatWidget() {
   const quickReplies = ["Bahalar barada", "Hyzmatlar barada", "Habarlaşmak"];
 
   return (
-    <div className="fixed bottom-6 right-6 z-[100] flex flex-col items-end">
+    <div
+      className={`fixed bottom-6 right-6 z-[100] flex flex-col items-end transition-all duration-200 ${
+        isMobileMenuOpen ? 'opacity-0 pointer-events-none' : 'opacity-100'
+      }`}
+    >
       <AnimatePresence>
         {showBubble && !isOpen && (
           <motion.div

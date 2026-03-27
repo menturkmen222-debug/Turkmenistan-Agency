@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Hero } from '@/components/sections/Hero';
@@ -14,8 +14,8 @@ import { useAnalytics } from '@/hooks/use-analytics';
 
 export default function Home() {
   const { trackEvent } = useAnalytics();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Basic intersection observer to track section views
   useEffect(() => {
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
@@ -26,15 +26,14 @@ export default function Home() {
     }, { threshold: 0.3 });
 
     document.querySelectorAll('section[id]').forEach(el => observer.observe(el));
-    
     return () => observer.disconnect();
   }, [trackEvent]);
 
   return (
     <div className="relative selection:bg-gold selection:text-black">
       <CustomCursor />
-      <Header />
-      
+      <Header isMobileMenuOpen={isMobileMenuOpen} setIsMobileMenuOpen={setIsMobileMenuOpen} />
+
       <main>
         <Hero />
         <PainPoints />
@@ -44,9 +43,9 @@ export default function Home() {
         <Pricing />
         <Contact />
       </main>
-      
+
       <Footer />
-      <AIChatWidget />
+      <AIChatWidget isMobileMenuOpen={isMobileMenuOpen} />
     </div>
   );
 }
