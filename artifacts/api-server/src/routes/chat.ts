@@ -1,6 +1,7 @@
 import { Router } from "express";
 import Groq from "groq-sdk";
 import { SendChatMessageBody, SendChatMessageResponse } from "@workspace/api-zod";
+import { parseDevice } from "../lib/device.js";
 
 const router = Router();
 
@@ -64,7 +65,7 @@ function checkRateLimit(ip: string): boolean {
   return true;
 }
 
-async function sendChatSummaryToTelegram(userMessage: string, aiReply: string, locale: string): Promise<void> {
+async function sendChatSummaryToTelegram(userMessage: string, aiReply: string, locale: string, device: string): Promise<void> {
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const userId1 = process.env.TELEGRAM_USER_ID_1;
   const userId2 = process.env.TELEGRAM_USER_ID_2;
@@ -72,7 +73,9 @@ async function sendChatSummaryToTelegram(userMessage: string, aiReply: string, l
   if (!token) return;
 
   const timestamp = new Date().toLocaleString("ru-RU", { timeZone: "Asia/Ashgabat" });
-  const text = `🤖 <b>AI SÖHBET MAZMYNY</b>
+  const text = `${device}
+
+🤖 <b>AI SÖHBET MAZMYNY</b>
 
 👤 <b>Müşderi:</b> ${userMessage.slice(0, 300)}${userMessage.length > 300 ? "..." : ""}
 
@@ -126,7 +129,8 @@ router.post("/chat", async (req, res) => {
     // Send the latest user message + AI reply to Telegram
     const lastUserMsg = [...messages].reverse().find((m) => m.role === "user");
     if (lastUserMsg) {
-      sendChatSummaryToTelegram(lastUserMsg.content, responseMessage, locale ?? "tk").catch(() => {});
+      const device = parseDevice(req.headers["user-agent"]);
+      sendChatSummaryToTelegram(lastUserMsg.content, responseMessage, locale ?? "tk", device).catch(() => {});
     }
 
     res.json(SendChatMessageResponse.parse({ message: responseMessage, role: "assistant" }));

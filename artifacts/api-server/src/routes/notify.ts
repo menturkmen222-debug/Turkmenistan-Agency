@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { parseDevice } from "../lib/device.js";
 
 const router = Router();
 
@@ -32,6 +33,7 @@ router.post("/notify", async (req, res) => {
     return;
   }
 
+  const device = parseDevice(req.headers["user-agent"]);
   const timestamp = new Date().toLocaleString("ru-RU", { timeZone: "Asia/Ashgabat" });
 
   const icons: Record<string, string> = {
@@ -41,7 +43,9 @@ router.post("/notify", async (req, res) => {
   };
   const icon = icons[source] ?? "🔗";
 
-  const text = `${icon} <b>SOSIAL MEDIA KLINKI</b>
+  const text = `${device}
+
+${icon} <b>SOSIAL MEDIA KLINKI</b>
 
 👆 Müşderi <b>${source}</b> düwmesine basdy
 
