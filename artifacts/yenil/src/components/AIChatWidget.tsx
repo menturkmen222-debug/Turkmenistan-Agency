@@ -190,7 +190,7 @@ export function AIChatWidget({ isMobileMenuOpen = false }: AIChatWidgetProps) {
 
       <button
         onClick={handleOpen}
-        className={`w-10 h-10 rounded-full overflow-hidden shadow-lg shadow-black/60 transition-all duration-300 ${
+        className={`w-12 h-12 rounded-full overflow-hidden shadow-lg shadow-black/60 transition-all duration-300 ${
           isOpen ? 'scale-0 opacity-0' : 'hover:scale-110 hover:shadow-primary/30'
         }`}
       >
