@@ -1,6 +1,15 @@
 import { Send } from 'lucide-react';
 import { useTranslation } from '@/lib/i18n';
 
+function notifyClick(source: string) {
+  const base = (import.meta.env.VITE_API_URL ?? '').replace(/\/+$/, '');
+  fetch(`${base}/api/notify`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ source }),
+  }).catch(() => {});
+}
+
 function TikTokIcon() {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4">
@@ -44,6 +53,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 title="Telegram: @yenil_ru"
+                onClick={() => notifyClick('Telegram')}
                 className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-muted hover:text-gold hover:border-gold transition-colors"
               >
                 <Send className="w-4 h-4" />
@@ -53,6 +63,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 title="TikTok: @yenil.ru"
+                onClick={() => notifyClick('TikTok')}
                 className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-muted hover:text-gold hover:border-gold transition-colors"
               >
                 <TikTokIcon />
@@ -62,6 +73,7 @@ export function Footer() {
                 target="_blank"
                 rel="noopener noreferrer"
                 title="IMO: @yenil.ru"
+                onClick={() => notifyClick('IMO')}
                 className="w-10 h-10 rounded-full bg-surface border border-border flex items-center justify-center text-muted hover:text-gold hover:border-gold transition-colors"
               >
                 <ImoIcon />
