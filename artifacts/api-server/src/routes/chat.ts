@@ -68,6 +68,7 @@ async function sendChatSummaryToTelegram(userMessage: string, aiReply: string, l
   const token = process.env.TELEGRAM_BOT_TOKEN;
   const userId1 = process.env.TELEGRAM_USER_ID_1;
   const userId2 = process.env.TELEGRAM_USER_ID_2;
+  const userId3 = process.env.TELEGRAM_USER_ID_3;
   if (!token) return;
 
   const timestamp = new Date().toLocaleString("ru-RU", { timeZone: "Asia/Ashgabat" });
@@ -79,7 +80,7 @@ async function sendChatSummaryToTelegram(userMessage: string, aiReply: string, l
 
 🕐 ${timestamp} | 🌍 ${locale}`;
 
-  const recipients = [userId1, userId2].filter(Boolean);
+  const recipients = [userId1, userId2, userId3].filter(Boolean);
   for (const chatId of recipients) {
     try {
       await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {

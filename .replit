@@ -77,3 +77,4 @@ externalPort = 80
 [userenv]
 
 [userenv.shared]
+TELEGRAM_USER_ID_3 = "7589983268"
