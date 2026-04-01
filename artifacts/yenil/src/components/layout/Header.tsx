@@ -25,6 +25,7 @@ export function Header({ isMobileMenuOpen, setIsMobileMenuOpen }: HeaderProps) {
     { href: '#home', label: t('nav.home') },
     { href: '#services', label: t('nav.services') },
     { href: '#how-it-works', label: t('nav.how') },
+    { href: '#portfolio', label: t('nav.portfolio') },
     { href: '#pricing', label: t('nav.pricing') },
     { href: '#contact', label: t('nav.contact') },
   ];
