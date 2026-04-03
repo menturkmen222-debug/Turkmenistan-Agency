@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Info } from 'lucide-react';
+import { useTranslation } from '@/lib/i18n';
 
 interface ModalProps {
   tier: 'starter' | 'pro' | null;
@@ -8,42 +9,21 @@ interface ModalProps {
 }
 
 function PricingModal({ tier, onClose }: ModalProps) {
+  const { t } = useTranslation();
   if (!tier) return null;
 
-  const content = tier === 'starter' ? {
-    headline: "Hiliň Binýady",
-    badge: "Başlangyç — $199",
-    points: [
-      { icon: "✅", text: "1-3 sahypa Premium Landing Page — ýokary hilli kod" },
-      { icon: "✅", text: "Mobil ekrana doly maslaşan dizaýn (100% responsive)" },
-      { icon: "✅", text: "Esasy SEO we ýokary tizlik — Google/Yandex üçin" },
-      { icon: "✅", text: "Müşderi sargyt formasy — müşderiler siziň bilen göni habarlaşar" },
-      { icon: "✅", text: "1 aý mugt tehniki goldaw" },
-      { icon: "⚠️", text: "Domen we Hosting bu baha degişli däl (aýratyn tölenýär)" },
-    ],
-    note: "Domen we Hosting bu baha degişli däl.",
-    elif: "Biz size dünýä derejesinde saýt gurup berýäris. Emma saýtyň internet ady (domen) we saklanýan ýeri (hosting) — bu sizin maýaňyz, ony öziňiz saýlap, aýratyn töleýärsiňiz.",
-    vision: "Domen ady — markaňyzyň sanly dünýädäki ömürlik salgysydyr. Ol 3-10 ýyl üçin alynýar we aýratyn tölenýär.",
-    why: "Bu baha — dünýä derejesindäki kod we dizaýn üçin. Hil bilen içi doly, müşderi getirýän saýt — bu siziň üçin 24 sagat işleýän satuwçy.",
-  } : {
-    headline: "Hemme Zat Taýýar — Açary Eline Al",
-    badge: "PRO ONLAÝN DÜKAN — $599",
-    points: [
-      { icon: "✅", text: "5-10 sahypaly Premium E-Commerce (Onlaýn dükan)" },
-      { icon: "✅", text: "CMS dolandyryş paneli — özüňiz aňsat üýtgedip bilersiňiz" },
-      { icon: "✅", text: "AI Chatbot integrasiýasy — 24/7 awtomat satuw" },
-      { icon: "✅", text: "Premium animasiýalar we interaktiw dizaýn" },
-      { icon: "✅", text: "Doly SEO we Ýokary tizlik (99% Performance)" },
-      { icon: "✅", text: "3 aý VIP tehniki goldaw" },
-      { icon: "🎁", text: "Domen — sowgat!" },
-      { icon: "🎁", text: "Professional Logo dizaýny — sowgat!" },
-      { icon: "✅", text: "Hosting we Google/Yandex indeksirleme — hemme zat içinde" },
-    ],
-    note: "Hiç hili goşmaça töleg ýok. Domen + Hosting + Logo = SOWGAT.",
-    elif: "Size taýýar açary berlen biznes ulgamyny hödürleýäris. Bir gezek tölärsiňiz — hemme zat işe girýär. Domen, hosting, logo, AI — hemmesi goşulan.",
-    vision: "Ilkinji günden satmaga taýýar. Siz diňe haryt we müşderileriňize üns beriň — galanyny biz edýäris.",
-    why: "Bu diňe saýt däl — bu awtomatlaşdyrylan biznes ulgamy. AI chatbot gijäniň yarynda hem müşderi kabul edýär. Logo bilen professional görünşiňiz bolar. Domen bilen ömürlik salgyňyz bolar. $599 = $800 gymmatlygy + $201 tygşytlamak.",
-  };
+  const isStarter = tier === 'starter';
+
+  const points = isStarter
+    ? Array.from({ length: 6 }, (_, i) => t(`pricing.starter_modal_point_${i}`))
+    : Array.from({ length: 9 }, (_, i) => t(`pricing.pro_modal_point_${i}`));
+
+  const headline = isStarter ? t('pricing.starter_modal_headline') : t('pricing.pro_modal_headline');
+  const badge = isStarter ? t('pricing.starter_modal_badge') : t('pricing.pro_modal_badge');
+  const note = isStarter ? t('pricing.starter_modal_note') : t('pricing.pro_modal_note');
+  const elif = isStarter ? t('pricing.starter_modal_elif') : t('pricing.pro_modal_elif');
+  const vision = isStarter ? t('pricing.starter_modal_vision') : t('pricing.pro_modal_vision');
+  const why = isStarter ? t('pricing.starter_modal_why') : t('pricing.pro_modal_why');
 
   return (
     <AnimatePresence>
@@ -63,58 +43,55 @@ function PricingModal({ tier, onClose }: ModalProps) {
           onClick={e => e.stopPropagation()}
           className="relative z-10 w-full max-w-lg rounded-3xl border border-white/10 bg-[#0e1a12]/95 backdrop-blur-xl shadow-2xl shadow-black/50 overflow-hidden"
         >
-          {/* Header */}
           <div className="px-8 pt-8 pb-6 border-b border-white/10">
-            <span className="inline-block px-3 py-1 rounded-full bg-primary/20 text-primary-light text-xs font-bold mb-3">{content.badge}</span>
-            <h3 className="text-2xl font-display font-bold text-white">{content.headline}</h3>
+            <span className="inline-block px-3 py-1 rounded-full bg-primary/20 text-primary-light text-xs font-bold mb-3">{badge}</span>
+            <h3 className="text-2xl font-display font-bold text-white">{headline}</h3>
           </div>
 
-          {/* Body */}
           <div className="px-8 py-6 space-y-6 max-h-[60vh] overflow-y-auto">
             <ul className="space-y-3">
-              {content.points.map((p, i) => (
+              {points.map((p, i) => (
                 <li key={i} className="flex items-start gap-3 text-white/90 text-sm">
-                  <span className="text-base flex-shrink-0 mt-0.5">{p.icon}</span>
-                  <span>{p.text}</span>
+                  <span className="text-base flex-shrink-0 mt-0.5">{p.slice(0, 2)}</span>
+                  <span>{p.slice(2).trim()}</span>
                 </li>
               ))}
             </ul>
 
             <div className="rounded-2xl bg-amber-500/10 border border-amber-500/20 p-4">
-              <p className="text-amber-300 text-sm font-medium mb-1">⚠️ {content.note}</p>
-              <p className="text-white/70 text-sm">{content.elif}</p>
+              <p className="text-amber-300 text-sm font-medium mb-1">⚠️ {note}</p>
+              <p className="text-white/70 text-sm">{elif}</p>
             </div>
 
             <div className="rounded-2xl bg-primary/10 border border-primary/20 p-4">
-              <p className="text-primary-light text-sm font-medium mb-1">💡 Näme üçin?</p>
-              <p className="text-white/70 text-sm">{content.vision}</p>
+              <p className="text-primary-light text-sm font-medium mb-1">{t('pricing.why_label')}</p>
+              <p className="text-white/70 text-sm">{vision}</p>
             </div>
 
             <div className="rounded-2xl bg-white/5 border border-white/10 p-4">
-              <p className="text-gold text-sm font-bold mb-2">🤔 NÄME ÜÇIN BU ARZAN DÄL?</p>
+              <p className="text-gold text-sm font-bold mb-2">{t('pricing.why_not_cheap_label')}</p>
               <p className="text-white/70 text-sm leading-relaxed">
-                {content.why}
+                {why}
               </p>
               <p className="text-white/70 text-sm leading-relaxed mt-2">
-                Siz diňe saýt däl, eýsem 24/7 işleýän satuwçy alýarsyňyz. Arzan zatlar soňy bilen has gymmada düşýär (düzedişler, haýal işlemek). Biz bolsa ömürlik hili kepillendirýäris.
+                {t('pricing.why_not_cheap_extra')}
               </p>
             </div>
           </div>
 
-          {/* Footer */}
           <div className="px-8 pb-8 pt-4 flex gap-3">
             <a
               href="#contact"
               onClick={onClose}
               className="flex-1 py-3 rounded-xl bg-gradient-to-r from-primary to-primary-light text-white font-bold text-sm text-center hover:scale-[1.02] transition-transform shadow-lg shadow-primary/20"
             >
-              Bu paketi saýlaň
+              {t('pricing.cta_start')}
             </a>
             <button
               onClick={onClose}
               className="px-4 py-3 rounded-xl border border-white/10 text-muted hover:text-white hover:border-white/30 transition-colors text-sm"
             >
-              Ýap
+              {t('pricing.close')}
             </button>
           </div>
         </motion.div>
@@ -125,6 +102,11 @@ function PricingModal({ tier, onClose }: ModalProps) {
 
 export function Pricing() {
   const [modal, setModal] = useState<'starter' | 'pro' | null>(null);
+  const { t } = useTranslation();
+
+  const starterFeatures = Array.from({ length: 5 }, (_, i) => t(`pricing.starter_feat_${i}`));
+  const proFeatures = Array.from({ length: 6 }, (_, i) => t(`pricing.pro_feat_${i}`));
+  const enterpriseFeatures = Array.from({ length: 6 }, (_, i) => t(`pricing.enterprise_feat_${i}`));
 
   return (
     <section id="pricing" className="py-24 bg-background relative">
@@ -133,10 +115,10 @@ export function Pricing() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-display font-bold text-white mb-4">
-            Taslamanyňyz üçin dogry paket saýlaň
+            {t('pricing.headline')}
           </h2>
           <p className="text-muted text-lg">
-            Saýlaň. Sargyt beriň. Üstünlik gazanyň.
+            {t('pricing.sub')}
           </p>
         </div>
 
@@ -150,7 +132,7 @@ export function Pricing() {
             className="glass-card p-8 rounded-3xl relative flex flex-col"
           >
             <div className="inline-flex px-3 py-1 rounded-full bg-white/10 text-white text-sm font-bold mb-6 self-start">
-              ⚡ Başlangyç
+              {t('pricing.starter_badge_label')}
             </div>
 
             <div className="mb-2">
@@ -159,23 +141,17 @@ export function Pricing() {
             <div className="mb-2 flex items-baseline gap-2">
               <span className="text-4xl font-mono font-bold text-emerald-400">$199</span>
               <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-400/15 text-emerald-400 font-bold">
-                $51 tygşytla
+                {t('pricing.starter_save_label')}
               </span>
             </div>
             <p className="text-muted text-sm mb-1">≈ 3 781 TMT</p>
 
             <p className="text-white font-medium my-6 pb-6 border-b border-border">
-              Kiçi kärhanalar we hususy telekeçiler üçin.
+              {t('pricing.starter_for')}
             </p>
 
             <ul className="space-y-3 mb-6 flex-1">
-              {[
-                '1-3 sahypa Premium Landing Page',
-                'Mobil ekrana doly maslaşan dizaýn',
-                'Esasy SEO we ýokary tizlik',
-                'Müşderi sargyt formasy',
-                '1 aý tehniki goldaw',
-              ].map((f, i) => (
+              {starterFeatures.map((f, i) => (
                 <li key={i} className="flex items-center gap-3 text-white/90 text-sm">
                   <Check className="w-4 h-4 text-primary-light flex-shrink-0" /> {f}
                 </li>
@@ -186,10 +162,10 @@ export function Pricing() {
               onClick={() => setModal('starter')}
               className="w-full py-3 rounded-xl border border-white/20 text-white/80 text-center text-sm font-semibold hover:bg-white/5 hover:text-white transition-all flex items-center justify-center gap-2 mb-3"
             >
-              <Info className="w-4 h-4" /> Doly maglumat
+              <Info className="w-4 h-4" /> {t('pricing.more_info')}
             </button>
             <a href="#contact" className="block w-full py-3 rounded-xl border border-white/20 text-white text-center font-bold hover:bg-white/10 transition-colors text-sm">
-              Bu paketi saýlaň
+              {t('pricing.cta_start')}
             </a>
           </motion.div>
 
@@ -205,17 +181,15 @@ export function Pricing() {
               boxShadow: '0 0 0 1.5px rgba(212,168,67,0.6), 0 0 60px -10px rgba(212,168,67,0.25)',
             }}
           >
-            {/* Glowing border overlay */}
             <div className="absolute inset-0 rounded-3xl pointer-events-none" style={{ boxShadow: 'inset 0 0 30px rgba(212,168,67,0.05)' }} />
 
-            {/* MOST POPULAR badge */}
             <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-gradient-to-r from-gold to-gold-light text-black font-bold px-5 py-1.5 rounded-full text-xs shadow-xl shadow-gold/30 whitespace-nowrap">
-              🏆 EŇ KÖP SAÝLANÝAN
+              {t('pricing.most_popular_label')}
             </div>
 
             <div className="p-8 md:p-10 flex flex-col flex-1">
               <div className="inline-flex px-3 py-1 rounded-full bg-primary/20 text-primary-light text-sm font-bold mb-6 mt-3 self-start">
-                PRO ONLAÝN DÜKAN
+                {t('pricing.pro_badge_label')}
               </div>
 
               <div className="mb-2">
@@ -224,34 +198,26 @@ export function Pricing() {
               <div className="mb-2 flex items-baseline gap-2 flex-wrap">
                 <span className="text-5xl font-mono font-bold text-gold drop-shadow-md">$599</span>
                 <span className="text-xs px-2 py-0.5 rounded-full bg-gold/15 text-gold font-bold whitespace-nowrap">
-                  $201 tygşytla · Çäklendirilen
+                  {t('pricing.pro_save_label')}
                 </span>
               </div>
               <p className="text-primary-light text-sm mb-1">≈ 11 381 TMT</p>
 
-              {/* Gift badges */}
               <div className="flex flex-wrap gap-2 my-4">
                 <span className="px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-bold">
-                  🎁 Domen — sowgat!
+                  {t('pricing.gift_domain')}
                 </span>
                 <span className="px-3 py-1 rounded-full bg-purple-500/15 border border-purple-500/30 text-purple-300 text-xs font-bold">
-                  🎁 Professional Logo — SOWGAT!
+                  {t('pricing.gift_logo')}
                 </span>
               </div>
 
               <p className="text-white font-medium my-4 pb-6 border-b border-white/10">
-                Orta we iri kärhanalar üçin doly sanly çözgüt.
+                {t('pricing.pro_for')}
               </p>
 
               <ul className="space-y-3 mb-6 flex-1">
-                {[
-                  '5-10 sahypaly Premium E-Commerce',
-                  'CMS dolandyryş paneli (Özüňiz aňsat üýtgedip bilersiňiz)',
-                  'AI Chatbot integrasiýasy (24/7 awtomat satuw)',
-                  'Premium animasiýalar we interaktiw dizaýn',
-                  'Doly SEO we Ýokary tizlik (99% Performance)',
-                  '3 aý VIP tehniki goldaw',
-                ].map((f, i) => (
+                {proFeatures.map((f, i) => (
                   <li key={i} className="flex items-start gap-3 text-white text-sm">
                     <Check className="w-4 h-4 text-gold flex-shrink-0 mt-0.5" /> {f}
                   </li>
@@ -262,10 +228,10 @@ export function Pricing() {
                 onClick={() => setModal('pro')}
                 className="w-full py-3 rounded-xl border border-gold/30 text-gold/80 text-center text-sm font-semibold hover:bg-gold/10 hover:text-gold transition-all flex items-center justify-center gap-2 mb-3"
               >
-                <Info className="w-4 h-4" /> Doly maglumat
+                <Info className="w-4 h-4" /> {t('pricing.more_info')}
               </button>
               <a href="#contact" className="block w-full py-3 rounded-xl bg-gradient-to-r from-primary to-primary-light text-white text-center font-bold shadow-lg shadow-primary/20 hover:scale-[1.02] transition-transform text-sm">
-                Bu paketi saýlaň
+                {t('pricing.cta_start')}
               </a>
             </div>
           </motion.div>
@@ -279,29 +245,22 @@ export function Pricing() {
             className="glass-card p-8 rounded-3xl relative flex flex-col"
           >
             <div className="inline-flex px-3 py-1 rounded-full bg-white/10 text-white text-sm font-bold mb-6 self-start">
-              💎 Enterprise
+              {t('pricing.enterprise_label')}
             </div>
 
             <div className="mb-6 flex flex-col justify-center">
               <span className="text-2xl font-display font-bold text-white leading-tight">
-                Ylalaşyk esasynda
+                {t('pricing.enterprise_price_label')}
               </span>
-              <p className="text-muted text-sm mt-1">Individual baha kesgitlenýär</p>
+              <p className="text-muted text-sm mt-1">{t('pricing.enterprise_individual')}</p>
             </div>
 
             <p className="text-white font-medium mb-6 pb-6 border-b border-border">
-              Iri kärhanalar, Platformalar, Portallar.
+              {t('pricing.enterprise_for')}
             </p>
 
             <ul className="space-y-3 mb-6 flex-1">
-              {[
-                'Çäksiz sahypalar we aýratyn funksionallyk',
-                'PWA (Telefona gurnalýan web-applikasiýa)',
-                'Kämil API we Töleg ulgamlarynyň integrasiýasy',
-                'Işlän dilli ulgam we Kämil AI Agent',
-                'Şahsy (Dedicated) Server we CDN',
-                '24/7 Premium tehniki goldaw',
-              ].map((f, i) => (
+              {enterpriseFeatures.map((f, i) => (
                 <li key={i} className="flex items-center gap-3 text-white/90 text-sm">
                   <Check className="w-4 h-4 text-primary-light flex-shrink-0" /> {f}
                 </li>
@@ -309,7 +268,7 @@ export function Pricing() {
             </ul>
 
             <a href="#contact" className="block w-full py-3 rounded-xl border border-white/20 text-white text-center font-bold hover:bg-white/10 transition-colors text-sm">
-              Biz bilen habarlaşyň
+              {t('pricing.cta_enterprise')}
             </a>
           </motion.div>
 

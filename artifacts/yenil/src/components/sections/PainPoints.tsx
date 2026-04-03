@@ -5,38 +5,20 @@ import { useTranslation } from '@/lib/i18n';
 export function PainPoints() {
   const { t } = useTranslation();
 
-  const cards = [
-    {
-      icon: <Snail className="w-6 h-6 text-gold" />,
-      title: "Söwdaňyz haýal geçýärmi?",
-      desc: "Köp kärhanalar sanly dünýäde yz galdyryp bilmeýär. Müşderiler sizi tapmasa — bäsdeşleriňiz olary alýar."
-    },
-    {
-      icon: <EyeOff className="w-6 h-6 text-gold" />,
-      title: "Müşderiler siz barada maglumat tapmaýarmy?",
-      desc: "Häzirki döwürde adamlar hyzmat almak üçin ilki internete girýärler. Saýtsyz iş — görünmeýän iş."
-    },
-    {
-      icon: <Megaphone className="w-6 h-6 text-gold" />,
-      title: "Işiňizi tanatmak kynmy?",
-      desc: "Habarçylyk çykdajylary artýar, netijesi azdyr. Professional saýt — iň güýçli mahabat guraly."
-    },
-    {
-      icon: <TrendingDown className="w-6 h-6 text-gold" />,
-      title: "Girdeji garaşylandan azmy?",
-      desc: "Onlaýn huzury bolmadyk kärhanalar ýyllyk 60%-e çenli mümkinçiligi elden berýärler."
-    },
-    {
-      icon: <Trophy className="w-6 h-6 text-gold" />,
-      title: "Bäsdeşler öňe geçip barýarmy?",
-      desc: "Her gün bäsdeşleriňiz özlerini onlaýnda güýçlendirýärler. Saklaýyn siz hem edilsin."
-    },
-    {
-      icon: <Globe className="w-6 h-6 text-gold" />,
-      title: "Diňe ýerli bazar bilen çäklenmek isleýärsiňizmi?",
-      desc: "Professioanl saýt bilen Türkmenistandan tutuş dünýä müşderilere ýetip bilersiňiz."
-    }
+  const icons = [
+    <Snail className="w-6 h-6 text-gold" />,
+    <EyeOff className="w-6 h-6 text-gold" />,
+    <Megaphone className="w-6 h-6 text-gold" />,
+    <TrendingDown className="w-6 h-6 text-gold" />,
+    <Trophy className="w-6 h-6 text-gold" />,
+    <Globe className="w-6 h-6 text-gold" />,
   ];
+
+  const cards = icons.map((icon, i) => ({
+    icon,
+    title: t(`pain.card_${i}_title`),
+    desc: t(`pain.card_${i}_desc`),
+  }));
 
   return (
     <section className="py-24 bg-background relative z-10">

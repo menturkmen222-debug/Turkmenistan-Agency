@@ -1,5 +1,6 @@
 import { motion } from 'framer-motion';
 import { Monitor, Building2, ShoppingCart, Layout, Zap } from 'lucide-react';
+import { useTranslation } from '@/lib/i18n';
 
 function PwaIcon() {
   return (
@@ -15,38 +16,22 @@ function PwaIcon() {
 }
 
 export function Services() {
-  const services = [
-    {
-      icon: <Monitor className="w-8 h-8" />,
-      title: "Landing Page Döretmek",
-      desc: "Ýeke sahypa, ýöne güýçli. Müşderiňizi gysga wagtyň içinde ynandyrmak üçin optimizasiýa edilen sahypalar."
-    },
-    {
-      icon: <Building2 className="w-8 h-8" />,
-      title: "Korporatiw Saýtlar",
-      desc: "Köp sahypa, köp bölüm. Işiňiziň ähli taraplaryny görkezýän professional web sahypalar."
-    },
-    {
-      icon: <ShoppingCart className="w-8 h-8" />,
-      title: "Onlaýn Dükkanlar",
-      desc: "Onlaýn satmak isleýärsiňizmi? Tölege taýýar, dolandyrmasy aňsat elektron dükkanlar."
-    },
-    {
-      icon: <PwaIcon />,
-      title: "PWA (Progressive Web Apps)",
-      desc: "App Store we Play Market garaşmazdan, göni brauzerden telefona gurnalýan, oflaýn işleýän we ykjam dizaýnly PWA programmalary. Müşderileriňiziň ekranynda hemişe bir basymda boluň."
-    },
-    {
-      icon: <Layout className="w-8 h-8" />,
-      title: "UI/UX Dizaýn",
-      desc: "Özüne çekiji, ulanmasy aňsat dizaýn. Estetika bilen funksiýanyň kämil birleşmesi."
-    },
-    {
-      icon: <Zap className="w-8 h-8" />,
-      title: "Saýt Optimizasiýasy",
-      desc: "Saýtyňyz haýalmy? Gözlegde görünmeýärmi? Tizligi we SEO-ny ýokarlandyrýarys."
-    }
+  const { t } = useTranslation();
+
+  const icons = [
+    <Monitor className="w-8 h-8" />,
+    <Building2 className="w-8 h-8" />,
+    <ShoppingCart className="w-8 h-8" />,
+    <PwaIcon />,
+    <Layout className="w-8 h-8" />,
+    <Zap className="w-8 h-8" />,
   ];
+
+  const services = icons.map((icon, i) => ({
+    icon,
+    title: t(`services.item_${i}_title`),
+    desc: t(`services.item_${i}_desc`),
+  }));
 
   return (
     <section id="services" className="py-24 bg-surface relative">
@@ -60,7 +45,7 @@ export function Services() {
             viewport={{ once: true }}
             className="text-4xl md:text-5xl font-display font-bold text-white mb-4"
           >
-            Nähili hyzmat hödürleýäris?
+            {t('services.headline')}
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -69,7 +54,7 @@ export function Services() {
             transition={{ delay: 0.1 }}
             className="text-xl text-muted max-w-2xl"
           >
-            Landing page döretmekden başlap, doly korporatiw portalara çenli — ählisini ederis.
+            {t('services.sub')}
           </motion.p>
         </div>
 
