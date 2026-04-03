@@ -16,14 +16,11 @@ export function AIChatWidget({ isMobileMenuOpen = false }: AIChatWidgetProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [showBubble, setShowBubble] = useState(false);
   const [input, setInput] = useState('');
-  const [messages, setMessages] = useState<{role: ChatMessageRole, content: string}[]>([
-    { role: ChatMessageRole.assistant, content: "Salam! 👋 Men Ýeňiliň akylly kömekçisidirin. Saýt döretmek, bahalar ýa-da hyzmatlarymyz barada islendik soralyňyza jogap berip bilerin!" }
-  ]);
+  const [messages, setMessages] = useState<{role: ChatMessageRole, content: string}[]>([]);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { mutate, isPending } = useSendChatMessage();
 
-  // Auto-trigger bubble
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!isOpen) setShowBubble(true);
@@ -44,8 +41,10 @@ export function AIChatWidget({ isMobileMenuOpen = false }: AIChatWidgetProps) {
   const handleSend = (text: string) => {
     if (!text.trim() || isPending) return;
     
+    const welcomeMsg = { role: ChatMessageRole.assistant, content: t('chat.welcome') };
+    const history = messages.length === 0 ? [welcomeMsg] : messages;
     const userMsg = { role: ChatMessageRole.user, content: text };
-    const newMessages = [...messages, userMsg];
+    const newMessages = [...history, userMsg];
     setMessages(newMessages);
     setInput('');
     trackEvent('ai_chat_message', { messageLength: text.length });
@@ -55,12 +54,16 @@ export function AIChatWidget({ isMobileMenuOpen = false }: AIChatWidgetProps) {
         setMessages([...newMessages, { role: res.role as ChatMessageRole, content: res.message }]);
       },
       onError: () => {
-        setMessages([...newMessages, { role: ChatMessageRole.assistant, content: "Bagyşlaň, tehniki näsazlyk ýüze çykdy. Biraz soňra synanşyň." }]);
+        setMessages([...newMessages, { role: ChatMessageRole.assistant, content: t('chat.error') }]);
       }
     });
   };
 
-  const quickReplies = ["Bahalar barada", "Hyzmatlar barada", "Habarlaşmak"];
+  const quickReplies = [t('chat.quick_0'), t('chat.quick_1'), t('chat.quick_2')];
+
+  const displayMessages = messages.length === 0
+    ? [{ role: ChatMessageRole.assistant, content: t('chat.welcome') }]
+    : messages;
 
   return (
     <div
@@ -78,9 +81,9 @@ export function AIChatWidget({ isMobileMenuOpen = false }: AIChatWidgetProps) {
             onClick={handleOpen}
           >
             <p className="text-sm font-medium text-foreground pr-4">
-              Kömek gerekmi? 🤔
+              {t('chat.bubble_title')}
               <br />
-              <span className="text-xs text-muted">Islendik soralyňyza jogap berip bilerin!</span>
+              <span className="text-xs text-muted">{t('chat.bubble_sub')}</span>
             </p>
             <button 
               className="absolute top-2 right-2 text-muted hover:text-foreground transition-colors"
@@ -109,7 +112,7 @@ export function AIChatWidget({ isMobileMenuOpen = false }: AIChatWidgetProps) {
                   <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 border-2 border-surface-2 rounded-full" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-foreground">Ýeňil AI Kömekçisi</h3>
+                  <h3 className="font-bold text-foreground">{t('chat.title')}</h3>
                   <p className="text-xs text-muted">TK · RU · EN · UZ · TR — Online 🟢</p>
                 </div>
               </div>
@@ -123,7 +126,7 @@ export function AIChatWidget({ isMobileMenuOpen = false }: AIChatWidgetProps) {
 
             {/* Messages */}
             <div className="flex-1 overflow-y-auto p-4 space-y-4 no-scrollbar">
-              {messages.map((msg, i) => (
+              {displayMessages.map((msg, i) => (
                 <div key={i} className={`flex ${msg.role === ChatMessageRole.user ? 'justify-end' : 'justify-start'}`}>
                   <div className={`max-w-[85%] p-3 rounded-2xl ${
                     msg.role === ChatMessageRole.user
@@ -148,7 +151,7 @@ export function AIChatWidget({ isMobileMenuOpen = false }: AIChatWidgetProps) {
             </div>
 
             {/* Quick Replies */}
-            {messages.length === 1 && (
+            {messages.length === 0 && (
               <div className="px-4 pb-2 flex flex-wrap gap-2">
                 {quickReplies.map((qr) => (
                   <button
@@ -172,7 +175,7 @@ export function AIChatWidget({ isMobileMenuOpen = false }: AIChatWidgetProps) {
                   type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
-                  placeholder="Soraň..."
+                  placeholder={t('chat.placeholder')}
                   className="flex-1 bg-transparent border-none text-sm px-3 py-2 focus:outline-none text-foreground placeholder:text-muted"
                 />
                 <button 
@@ -196,7 +199,7 @@ export function AIChatWidget({ isMobileMenuOpen = false }: AIChatWidgetProps) {
       >
         <img
           src={`${import.meta.env.BASE_URL}images/ai-bot-icon.png`}
-          alt="AI Kömekçi"
+          alt={t('chat.alt')}
           className="w-full h-full object-cover object-center scale-105"
         />
       </button>

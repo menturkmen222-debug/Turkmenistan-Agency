@@ -45,7 +45,7 @@ export function Footer() {
               <span className="font-display font-bold text-3xl text-white">Ýeňil<span className="text-gold">.</span></span>
             </a>
             <p className="text-muted max-w-sm mb-6 font-medium">
-              Sanly dünýäde ýeňil ädim. Biz biznesiňizi ösdürmek üçin innowasiýa we dizaýny birleşdirýäris.
+              {t('footer.tagline_full')}
             </p>
             <div className="flex gap-3">
               <a
